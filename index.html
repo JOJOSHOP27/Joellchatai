@@ -91,13 +91,8 @@
             animation: pulse 1.5s infinite;
         }
         @keyframes pulse {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.3;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
         .chat-container {
             flex: 1;
@@ -118,13 +113,8 @@
             flex-direction: column;
             gap: 10px;
         }
-        .chat-messages::-webkit-scrollbar {
-            width: 4px;
-        }
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 20px;
-        }
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 20px; }
         .message {
             max-width: 88%;
             padding: 10px 14px;
@@ -179,23 +169,11 @@
             background: var(--text-muted);
             animation: typing 1.2s infinite ease-in-out;
         }
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typing {
-            0%,
-            60%,
-            100% {
-                transform: translateY(0);
-                opacity: 0.4;
-            }
-            30% {
-                transform: translateY(-6px);
-                opacity: 1;
-            }
+            0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+            30% { transform: translateY(-6px); opacity: 1; }
         }
         .input-wrapper {
             flex-shrink: 0;
@@ -224,9 +202,7 @@
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
-        .input-wrapper input::placeholder {
-            color: var(--text-muted);
-        }
+        .input-wrapper input::placeholder { color: var(--text-muted); }
         .input-wrapper button {
             background: var(--accent);
             border: none;
@@ -277,69 +253,25 @@
             background: rgba(16, 163, 127, 0.08);
         }
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-            to {
-                opacity: 1;
-                transform: 0;
-            }
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: 0; }
         }
         @media (max-width: 600px) {
-            .app-container {
-                max-height: none;
-                height: 100vh;
-                padding: 0;
-            }
-            body {
-                padding: 8px;
-            }
-            .top-header .logo-area {
-                font-size: 1.1rem;
-            }
-            .top-header .logo-area img {
-                height: 30px;
-            }
-            .message {
-                max-width: 92%;
-                font-size: 0.88rem;
-            }
-            .input-wrapper {
-                padding: 8px 12px 12px;
-            }
-            .input-wrapper input {
-                font-size: 0.85rem;
-                padding: 10px 14px;
-            }
-            .input-wrapper button {
-                width: 42px;
-                height: 42px;
-                font-size: 1rem;
-            }
-            .suggestion-chips {
-                padding: 4px 12px 8px;
-                gap: 6px;
-            }
-            .suggestion-chips .chip {
-                font-size: 0.65rem;
-                padding: 4px 10px;
-            }
+            .app-container { max-height: none; height: 100vh; padding: 0; }
+            body { padding: 8px; }
+            .top-header .logo-area { font-size: 1.1rem; }
+            .top-header .logo-area img { height: 30px; }
+            .message { max-width: 92%; font-size: 0.88rem; }
+            .input-wrapper { padding: 8px 12px 12px; }
+            .input-wrapper input { font-size: 0.85rem; padding: 10px 14px; }
+            .input-wrapper button { width: 42px; height: 42px; font-size: 1rem; }
+            .suggestion-chips { padding: 4px 12px 8px; gap: 6px; }
+            .suggestion-chips .chip { font-size: 0.65rem; padding: 4px 10px; }
         }
         @media (max-width: 400px) {
-            .suggestion-chips .chip {
-                font-size: 0.6rem;
-                padding: 3px 8px;
-            }
-            .input-wrapper input {
-                font-size: 0.8rem;
-                padding: 8px 12px;
-            }
-            .input-wrapper button {
-                width: 38px;
-                height: 38px;
-                font-size: 0.9rem;
-            }
+            .suggestion-chips .chip { font-size: 0.6rem; padding: 3px 8px; }
+            .input-wrapper input { font-size: 0.8rem; padding: 8px 12px; }
+            .input-wrapper button { width: 38px; height: 38px; font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -350,9 +282,7 @@
                 <img src="https://files.catbox.moe/ijemcy.png" alt="logo" />
                 <span>JOELL AI</span>
             </div>
-            <span class="status-badge">
-                <span class="dot"></span> Online
-            </span>
+            <span class="status-badge"><span class="dot"></span> Online</span>
         </header>
         <div class="chat-container">
             <div class="chat-messages" id="chatMessages">
@@ -409,19 +339,16 @@
             };
 
             try {
-                // === PAKAI CORS PROXY AGAR BISA DIPANGGIL DARI BROWSER ===
-                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+                // ===== PAKAI PROXY YANG SUPPORT POST + HEADER =====
+                const proxyUrl = 'https://thingproxy.freeboard.io/fetch/' + url;
 
                 const res = await fetch(proxyUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        // API key dikirim di body karena proxy tidak support header Authorization
+                        'Authorization': `Bearer ${API_KEY}`
                     },
-                    body: JSON.stringify({
-                        ...payload,
-                        api_key: API_KEY // dikirim di body untuk proxy
-                    })
+                    body: JSON.stringify(payload)
                 });
 
                 if (!res.ok) {
@@ -507,4 +434,4 @@
         chatInput.focus();
     </script>
 </body>
-                                              </html>
+</html>
