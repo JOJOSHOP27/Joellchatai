@@ -357,9 +357,21 @@
 
     <script>
         // ============================================================
-        //  API KEY GEMINI
+        //  API KEY GEMINI (dari curl yang berhasil)
         // ============================================================
-        const API_KEY = 'AQ.Ab8RN6IwVQwoKfQNjv65f-O9BfAWNJgoXT3I1vMPZFxQDIUIzg';
+        const API_KEY = 'AQ.Ab8RN6JIzhbcQfhmYFB0YPBGqh-TJ4SAfQm13sg5P-6UUHC5NA';
+
+        // ============================================================
+        //  DAFTAR MODEL (fallback otomatis)
+        // ============================================================
+        const MODELS = [
+            'gemini-2.0-flash-exp',
+            'gemini-1.5-flash',
+            'gemini-1.5-pro',
+            'gemini-pro'
+        ];
+
+        let currentModelIndex = 0;
 
         // ============================================================
         //  DATA PRODUK (konteks untuk AI)
@@ -411,11 +423,11 @@
         }
 
         // ============================================================
-        //  KIRIM KE GEMINI (pakai model gemini-pro, API v1)
+        //  KIRIM KE GEMINI (dengan fallback model otomatis)
         // ============================================================
         async function sendToGemini(userMessage) {
-            // Gunakan API v1 dengan model gemini-pro
-            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
+            const model = MODELS[currentModelIndex];
+            const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${API_KEY}`;
 
             const payload = {
                 contents: [{
@@ -435,7 +447,14 @@
 
                 if (!res.ok) {
                     const err = await res.json();
-                    console.error('API Error Detail:', err);
+                    // Jika model tidak ditemukan, coba model berikutnya
+                    if (err.error?.message?.includes('not found') || err.error?.message?.includes('not supported') || err
+                        .error?.message?.includes('404')) {
+                        if (currentModelIndex < MODELS.length - 1) {
+                            currentModelIndex++;
+                            return await sendToGemini(userMessage);
+                        }
+                    }
                     throw new Error(err.error?.message || 'API error');
                 }
 
