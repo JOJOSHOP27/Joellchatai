@@ -12,7 +12,6 @@
             box-sizing: border-box;
             font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
         }
-
         :root {
             --bg-primary: #0b0e14;
             --bg-secondary: #141820;
@@ -27,7 +26,6 @@
             --radius-sm: 12px;
             --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.5);
         }
-
         body {
             background: var(--bg-primary);
             color: var(--text-primary);
@@ -38,7 +36,6 @@
             align-items: center;
             padding: 16px;
         }
-
         .app-container {
             width: 100%;
             max-width: 720px;
@@ -48,8 +45,6 @@
             height: 96vh;
             max-height: 800px;
         }
-
-        /* ===== HEADER ===== */
         .top-header {
             display: flex;
             align-items: center;
@@ -58,7 +53,6 @@
             border-bottom: 1px solid var(--border-subtle);
             flex-shrink: 0;
         }
-
         .top-header .logo-area {
             display: flex;
             align-items: center;
@@ -67,7 +61,6 @@
             font-size: 1.4rem;
             color: var(--text-primary);
         }
-
         .top-header .logo-area img {
             height: 38px;
             width: auto;
@@ -76,14 +69,12 @@
             padding: 4px;
             border: 1px solid var(--border-subtle);
         }
-
         .top-header .logo-area span {
             background: linear-gradient(135deg, var(--accent), #34d399);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .status-badge {
             font-size: 0.7rem;
             color: var(--text-muted);
@@ -108,8 +99,6 @@
                 opacity: 0.3;
             }
         }
-
-        /* ===== CHAT ===== */
         .chat-container {
             flex: 1;
             background: var(--bg-card);
@@ -121,7 +110,6 @@
             flex-direction: column;
             min-height: 0;
         }
-
         .chat-messages {
             flex: 1;
             overflow-y: auto;
@@ -130,7 +118,6 @@
             flex-direction: column;
             gap: 10px;
         }
-
         .chat-messages::-webkit-scrollbar {
             width: 4px;
         }
@@ -138,7 +125,6 @@
             background: var(--accent);
             border-radius: 20px;
         }
-
         .message {
             max-width: 88%;
             padding: 10px 14px;
@@ -148,14 +134,12 @@
             font-size: 0.92rem;
             word-wrap: break-word;
         }
-
         .message.user {
             align-self: flex-end;
             background: var(--accent);
             color: #fff;
             border-bottom-right-radius: 4px;
         }
-
         .message.bot {
             align-self: flex-start;
             background: var(--bg-secondary);
@@ -163,7 +147,6 @@
             color: var(--text-primary);
             border-bottom-left-radius: 4px;
         }
-
         .message.bot .msg-label {
             font-size: 0.7rem;
             color: var(--accent);
@@ -173,15 +156,12 @@
             align-items: center;
             gap: 6px;
         }
-
         .message .timestamp {
             font-size: 0.6rem;
             opacity: 0.35;
             margin-top: 4px;
             text-align: right;
         }
-
-        /* ===== TYPING ===== */
         .typing-indicator {
             display: none;
             align-self: flex-start;
@@ -217,8 +197,6 @@
                 opacity: 1;
             }
         }
-
-        /* ===== INPUT — mengambang di atas ===== */
         .input-wrapper {
             flex-shrink: 0;
             padding: 12px 16px 14px;
@@ -231,7 +209,6 @@
             bottom: 0;
             z-index: 10;
         }
-
         .input-wrapper input {
             flex: 1;
             padding: 12px 16px;
@@ -243,16 +220,13 @@
             outline: none;
             transition: 0.2s;
         }
-
         .input-wrapper input:focus {
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
-
         .input-wrapper input::placeholder {
             color: var(--text-muted);
         }
-
         .input-wrapper button {
             background: var(--accent);
             border: none;
@@ -268,19 +242,15 @@
             justify-content: center;
             flex-shrink: 0;
         }
-
         .input-wrapper button:hover {
             background: #0d8c6a;
             box-shadow: 0 0 18px var(--accent-glow);
         }
-
         .input-wrapper button:disabled {
             opacity: 0.4;
             cursor: not-allowed;
             box-shadow: none;
         }
-
-        /* ===== CHIPS ===== */
         .suggestion-chips {
             display: flex;
             flex-wrap: wrap;
@@ -290,7 +260,6 @@
             background: var(--bg-secondary);
             flex-shrink: 0;
         }
-
         .suggestion-chips .chip {
             background: var(--bg-card);
             border: 1px solid var(--border-subtle);
@@ -302,13 +271,11 @@
             transition: 0.2s;
             white-space: nowrap;
         }
-
         .suggestion-chips .chip:hover {
             border-color: var(--accent);
             color: var(--text-primary);
             background: rgba(16, 163, 127, 0.08);
         }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -319,8 +286,6 @@
                 transform: 0;
             }
         }
-
-        /* ===== RESPONSIF ===== */
         @media (max-width: 600px) {
             .app-container {
                 max-height: none;
@@ -361,7 +326,6 @@
                 padding: 4px 10px;
             }
         }
-
         @media (max-width: 400px) {
             .suggestion-chips .chip {
                 font-size: 0.6rem;
@@ -381,8 +345,6 @@
 </head>
 <body>
     <div class="app-container">
-
-        <!-- HEADER -->
         <header class="top-header">
             <div class="logo-area">
                 <img src="https://files.catbox.moe/ijemcy.png" alt="logo" />
@@ -392,8 +354,6 @@
                 <span class="dot"></span> Online
             </span>
         </header>
-
-        <!-- CHAT -->
         <div class="chat-container">
             <div class="chat-messages" id="chatMessages">
                 <div class="message bot">
@@ -402,40 +362,27 @@
                     <div class="timestamp">Sekarang</div>
                 </div>
             </div>
-
-            <!-- TYPING -->
             <div class="typing-indicator" id="typingIndicator">
                 <span></span><span></span><span></span>
             </div>
-
-            <!-- SUGGESTION CHIPS -->
             <div class="suggestion-chips">
                 <span class="chip" data-msg="Apa saja produk yang tersedia?">📦 Produk</span>
                 <span class="chip" data-msg="Bagaimana cara pembayaran?">💳 Pembayaran</span>
                 <span class="chip" data-msg="Bantu saya memilih hosting">🖥️ Hosting</span>
                 <span class="chip" data-msg="Cara order via WhatsApp?">📱 Order</span>
             </div>
-
-            <!-- INPUT — STICKY DI BAWAH -->
             <div class="input-wrapper">
                 <input type="text" id="chatInput" placeholder="Ketik pesan..." />
                 <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
-
     </div>
 
     <script>
         // ============================================================
-        //  API KEY OPENAI
+        //  API KEY OPENAI (dari kamu)
         // ============================================================
         const API_KEY = 'sk-proj-qrLTifE-sRgegJvOmoAS0PvyX7QQitbBdEf-Cnbuw0hr9Za4kRtIilVoxV5EPaYTESTdYwIo78T3BlbkFJ3PxeX2vuYG9ZEBGyY8bhTbW5--yYgohMg1x-T0hvoK4Lj3aemvJtojXc-9lsbJOesXRUSRsdkA';
-
-        // ============================================================
-        //  MODEL OPENAI (fallback otomatis)
-        // ============================================================
-        const MODELS = ['gpt-4o-mini', 'gpt-3.5-turbo'];
-        let currentModelIndex = 0;
 
         // ============================================================
         //  ELEMEN DOM
@@ -446,27 +393,15 @@
         const typingIndicator = document.getElementById('typingIndicator');
 
         // ============================================================
-        //  SYSTEM PROMPT (bisa diisi sesuai kebutuhan)
-        // ============================================================
-        function getSystemPrompt() {
-            return `Kamu adalah JOELL AI, asisten virtual yang ramah dan profesional.
-            Tugasmu membantu pengguna dengan pertanyaan apa pun dengan sopan dan jelas.
-            Gunakan bahasa Indonesia yang baik dan benar.
-            Jika ditanya di luar pengetahuanmu, katakan dengan jujur bahwa kamu tidak tahu.
-            Jangan pernah menyebutkan bahwa kamu adalah AI dari OpenAI, cukup perkenalkan sebagai JOELL AI.`;
-        }
-
-        // ============================================================
-        //  KIRIM KE OPENAI
+        //  KIRIM KE OPENAI via CORS PROXY (biar jalan di browser)
         // ============================================================
         async function sendToOpenAI(userMessage) {
-            const model = MODELS[currentModelIndex];
             const url = 'https://api.openai.com/v1/chat/completions';
 
             const payload = {
-                model: model,
+                model: 'gpt-4o-mini',
                 messages: [
-                    { role: 'system', content: getSystemPrompt() },
+                    { role: 'system', content: 'Kamu adalah JOELL AI, asisten virtual yang ramah dan profesional. Gunakan bahasa Indonesia yang baik dan benar.' },
                     { role: 'user', content: userMessage }
                 ],
                 temperature: 0.7,
@@ -474,34 +409,28 @@
             };
 
             try {
-                const res = await fetch(url, {
+                // === PAKAI CORS PROXY AGAR BISA DIPANGGIL DARI BROWSER ===
+                const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(url);
+
+                const res = await fetch(proxyUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${API_KEY}`
+                        // API key dikirim di body karena proxy tidak support header Authorization
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        ...payload,
+                        api_key: API_KEY // dikirim di body untuk proxy
+                    })
                 });
 
                 if (!res.ok) {
                     const err = await res.json();
-                    console.error('OpenAI Error:', err);
-
-                    // Jika model tidak ditemukan atau quota habis, coba model berikutnya
-                    if (err.error?.code === 'model_not_found' ||
-                        err.error?.code === 'insufficient_quota' ||
-                        err.error?.message?.includes('model')) {
-                        if (currentModelIndex < MODELS.length - 1) {
-                            currentModelIndex++;
-                            return await sendToOpenAI(userMessage);
-                        }
-                    }
                     throw new Error(err.error?.message || 'API error');
                 }
 
                 const data = await res.json();
-                return data.choices?.[0]?.message?.content ||
-                    'Maaf, saya tidak bisa menjawab pertanyaan itu.';
+                return data.choices?.[0]?.message?.content || 'Maaf, saya tidak bisa menjawab.';
             } catch (e) {
                 console.error('OpenAI Error:', e);
                 return `⚠️ Terjadi kesalahan: ${e.message}. Coba lagi nanti.`;
@@ -575,10 +504,7 @@
             });
         });
 
-        // ============================================================
-        //  FOCUS INPUT SAAT LOAD
-        // ============================================================
         chatInput.focus();
     </script>
 </body>
-</html>
+                                              </html>
