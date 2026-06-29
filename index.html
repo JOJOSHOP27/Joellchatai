@@ -4,21 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>JOELL AI</title>
-
-    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
     <style>
-        /* ── Reset & Base ─────────────────────────────────────────── */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         :root {
             --bg-primary: #0b0d15;
             --bg-secondary: #131620;
@@ -37,7 +32,6 @@
             --radius-full: 9999px;
             --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         html,
         body {
             height: 100%;
@@ -47,8 +41,6 @@
             overflow: hidden;
             -webkit-font-smoothing: antialiased;
         }
-
-        /* ── App Container ────────────────────────────────────────── */
         #app {
             display: flex;
             flex-direction: column;
@@ -59,8 +51,6 @@
             position: relative;
             box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
         }
-
-        /* ── Header ───────────────────────────────────────────────── */
         .chat-header {
             flex-shrink: 0;
             padding: 18px 24px;
@@ -73,7 +63,6 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
-
         .chat-header .avatar {
             width: 44px;
             height: 44px;
@@ -88,11 +77,9 @@
             flex-shrink: 0;
             box-shadow: 0 0 20px rgba(43, 106, 255, 0.3);
         }
-
         .chat-header .brand {
             flex: 1;
         }
-
         .chat-header .brand h1 {
             font-size: 20px;
             font-weight: 700;
@@ -102,7 +89,6 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .chat-header .brand .sub {
             font-size: 12px;
             color: var(--text-muted);
@@ -110,7 +96,6 @@
             letter-spacing: 0.3px;
             -webkit-text-fill-color: var(--text-muted);
         }
-
         .chat-header .status {
             display: flex;
             align-items: center;
@@ -122,7 +107,6 @@
             border-radius: var(--radius-full);
             border: 1px solid var(--border-color);
         }
-
         .chat-header .status .dot {
             width: 8px;
             height: 8px;
@@ -130,7 +114,6 @@
             background: #00e676;
             animation: pulse-dot 1.8s ease-in-out infinite;
         }
-
         @keyframes pulse-dot {
             0%,
             100% {
@@ -142,8 +125,6 @@
                 transform: scale(0.8);
             }
         }
-
-        /* ── Messages Area ───────────────────────────────────────── */
         .messages-wrapper {
             flex: 1;
             overflow-y: auto;
@@ -154,40 +135,31 @@
             gap: 8px;
             scroll-behavior: smooth;
             background: var(--bg-primary);
-            /* space for floating input + safe-area */
             scroll-padding-bottom: 100px;
         }
-
         .messages-wrapper::-webkit-scrollbar {
             width: 4px;
         }
-
         .messages-wrapper::-webkit-scrollbar-track {
             background: transparent;
         }
-
         .messages-wrapper::-webkit-scrollbar-thumb {
             background: var(--border-color);
             border-radius: var(--radius-full);
         }
-
-        /* ── Message Bubbles ──────────────────────────────────────── */
         .message {
             display: flex;
             gap: 12px;
             max-width: 88%;
             animation: msg-in 0.35s ease-out both;
         }
-
         .message.user {
             align-self: flex-end;
             flex-direction: row-reverse;
         }
-
         .message.ai {
             align-self: flex-start;
         }
-
         @keyframes msg-in {
             from {
                 opacity: 0;
@@ -198,7 +170,6 @@
                 transform: translateY(0) scale(1);
             }
         }
-
         .message .msg-avatar {
             width: 34px;
             height: 34px;
@@ -212,17 +183,14 @@
             color: #fff;
             margin-top: 2px;
         }
-
         .message.user .msg-avatar {
             background: linear-gradient(135deg, #2b6aff, #1a4fd0);
             box-shadow: 0 4px 12px rgba(43, 106, 255, 0.3);
         }
-
         .message.ai .msg-avatar {
             background: linear-gradient(135deg, #7c4dff, #536dfe);
             box-shadow: 0 4px 12px rgba(124, 77, 255, 0.25);
         }
-
         .message .bubble {
             padding: 14px 18px;
             border-radius: var(--radius-md);
@@ -232,20 +200,17 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
             position: relative;
         }
-
         .message.user .bubble {
             background: var(--bg-user-msg);
             color: #fff;
             border-bottom-right-radius: 4px;
         }
-
         .message.ai .bubble {
             background: var(--bg-card);
             color: var(--text-primary);
             border-bottom-left-radius: 4px;
             border: 1px solid var(--border-color);
         }
-
         .message .bubble .timestamp {
             display: block;
             font-size: 10px;
@@ -254,12 +219,14 @@
             text-align: right;
             letter-spacing: 0.2px;
         }
-
         .message.user .bubble .timestamp {
             color: rgba(255, 255, 255, 0.6);
         }
-
-        /* ── Typing Indicator ────────────────────────────────────── */
+        .message.error .bubble {
+            background: #2a1a1a;
+            border-color: #ff3b3b;
+            color: #ff8a8a;
+        }
         .typing-indicator {
             display: flex;
             gap: 12px;
@@ -269,7 +236,6 @@
             padding: 4px 0 8px 0;
             animation: msg-in 0.3s ease-out both;
         }
-
         .typing-indicator .dots {
             display: flex;
             gap: 6px;
@@ -279,7 +245,6 @@
             border-bottom-left-radius: 4px;
             border: 1px solid var(--border-color);
         }
-
         .typing-indicator .dots span {
             display: block;
             width: 8px;
@@ -288,7 +253,6 @@
             background: var(--text-muted);
             animation: typing-bounce 1.4s ease-in-out infinite both;
         }
-
         .typing-indicator .dots span:nth-child(1) {
             animation-delay: 0s;
         }
@@ -298,7 +262,6 @@
         .typing-indicator .dots span:nth-child(3) {
             animation-delay: 0.4s;
         }
-
         @keyframes typing-bounce {
             0%,
             60%,
@@ -311,8 +274,6 @@
                 opacity: 1;
             }
         }
-
-        /* ── Floating Input Bar ──────────────────────────────────── */
         .input-bar {
             flex-shrink: 0;
             position: sticky;
@@ -323,10 +284,8 @@
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             z-index: 20;
-            /* float effect */
             box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.4);
         }
-
         .input-bar .input-container {
             display: flex;
             align-items: flex-end;
@@ -337,12 +296,10 @@
             border: 1px solid var(--border-color);
             transition: border-color var(--transition), box-shadow var(--transition);
         }
-
         .input-bar .input-container:focus-within {
             border-color: #2b6aff;
             box-shadow: 0 0 0 3px rgba(43, 106, 255, 0.15);
         }
-
         .input-bar .input-container textarea {
             flex: 1;
             background: transparent;
@@ -357,12 +314,10 @@
             line-height: 1.5;
             min-height: 24px;
         }
-
         .input-bar .input-container textarea::placeholder {
             color: var(--text-muted);
             font-weight: 400;
         }
-
         .input-bar .input-container .btn-send {
             width: 46px;
             height: 46px;
@@ -379,24 +334,19 @@
             flex-shrink: 0;
             box-shadow: 0 4px 16px rgba(43, 106, 255, 0.25);
         }
-
         .input-bar .input-container .btn-send:hover {
             transform: scale(1.05);
             box-shadow: 0 6px 24px rgba(43, 106, 255, 0.35);
         }
-
         .input-bar .input-container .btn-send:active {
             transform: scale(0.94);
         }
-
         .input-bar .input-container .btn-send:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
-
-        /* ── Empty State ──────────────────────────────────────────── */
         .empty-state {
             flex: 1;
             display: flex;
@@ -408,7 +358,6 @@
             color: var(--text-muted);
             user-select: none;
         }
-
         .empty-state .icon {
             font-size: 52px;
             margin-bottom: 20px;
@@ -418,69 +367,55 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-
         .empty-state h2 {
             font-size: 22px;
             font-weight: 600;
             color: var(--text-secondary);
             margin-bottom: 8px;
         }
-
         .empty-state p {
             font-size: 14px;
             max-width: 340px;
             line-height: 1.6;
             color: var(--text-muted);
         }
-
-        /* ── Responsive ───────────────────────────────────────────── */
         @media (max-width: 600px) {
             #app {
                 max-width: 100%;
                 border-radius: 0;
             }
-
             .chat-header {
                 padding: 14px 16px;
             }
-
             .chat-header .brand h1 {
                 font-size: 17px;
             }
-
             .messages-wrapper {
                 padding: 14px 12px 8px 12px;
             }
-
             .message {
                 max-width: 94%;
             }
-
             .message .bubble {
                 font-size: 14px;
                 padding: 12px 14px;
             }
-
             .input-bar {
                 padding: 8px 12px 16px 12px;
             }
-
             .input-bar .input-container {
                 padding: 4px 4px 4px 14px;
                 border-radius: var(--radius-sm);
             }
-
             .input-bar .input-container textarea {
                 font-size: 14px;
                 padding: 8px 0;
             }
-
             .input-bar .input-container .btn-send {
                 width: 42px;
                 height: 42px;
                 font-size: 17px;
             }
-
             .empty-state .icon {
                 font-size: 40px;
             }
@@ -488,7 +423,6 @@
                 font-size: 18px;
             }
         }
-
         @media (max-width: 400px) {
             .chat-header .status {
                 display: none;
@@ -499,14 +433,10 @@
                 font-size: 11px;
             }
         }
-
-        /* ── Scrollbar untuk Firefox ─────────────────────────────── */
         .messages-wrapper {
             scrollbar-width: thin;
             scrollbar-color: var(--border-color) transparent;
         }
-
-        /* ── Safe area untuk notched phones ────────────────────── */
         @supports (padding-bottom: env(safe-area-inset-bottom)) {
             .input-bar {
                 padding-bottom: calc(20px + env(safe-area-inset-bottom));
@@ -514,12 +444,8 @@
         }
     </style>
 </head>
-
 <body>
-
     <div id="app">
-
-        <!-- Header -->
         <header class="chat-header">
             <div class="avatar">J</div>
             <div class="brand">
@@ -532,18 +458,14 @@
             </div>
         </header>
 
-        <!-- Messages -->
         <div class="messages-wrapper" id="messagesWrapper">
-            <!-- Empty state default -->
             <div class="empty-state" id="emptyState">
                 <div class="icon"><i class="fas fa-comment-dots"></i></div>
                 <h2>Halo, saya JOELL AI</h2>
                 <p>Tanyakan apa saja, saya siap membantu Anda dengan informasi dan wawasan terbaik.</p>
             </div>
-            <!-- Messages will be injected here -->
         </div>
 
-        <!-- Floating Input Bar -->
         <div class="input-bar" id="inputBar">
             <div class="input-container">
                 <textarea id="userInput" rows="1" placeholder="Ketik pesan..." aria-label="Ketik pesan"></textarea>
@@ -552,22 +474,17 @@
                 </button>
             </div>
         </div>
-
     </div>
 
     <script>
-        // ──────────────────────────────────────────────────────────────
-        //  JOELL AI — Full Chat Client
-        //  Uses OpenAI Chat Completions API
-        // ──────────────────────────────────────────────────────────────
-
         (function() {
             'use strict';
 
             // ── Konfigurasi ──────────────────────────────────────
             const API_KEY =
                 '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';
-            const API_URL = 'https://api.openai.com/v1/chat/completions';
+            const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+            const PROXY_URL = 'https://corsproxy.io/?'; // proxy CORS gratis
             const MODEL = 'gpt-3.5-turbo';
             const MAX_TOKENS = 800;
             const TEMPERATURE = 0.7;
@@ -579,31 +496,27 @@
             const sendBtn = document.getElementById('sendBtn');
 
             // ── State ─────────────────────────────────────────────
-            let messages = []; // { role, content }
+            let messages = [];
             let isProcessing = false;
 
-            // ── Helper: scroll ke bawah ──────────────────────────
+            // ── Helper ────────────────────────────────────────────
             function scrollToBottom() {
                 requestAnimationFrame(() => {
                     wrapper.scrollTop = wrapper.scrollHeight;
                 });
             }
 
-            // ── Helper: format waktu ─────────────────────────────
             function getTime() {
-                const d = new Date();
-                return d.getHours().toString().padStart(2, '0') + ':' +
-                    d.getMinutes().toString().padStart(2, '0');
+                return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
             }
 
-            // ── Render pesan ke DOM ──────────────────────────────
-            function renderMessage(role, content) {
-                // Hilangkan empty state jika ada
+            // ── Render pesan ──────────────────────────────────────
+            function renderMessage(role, content, isError = false) {
                 if (emptyState) emptyState.style.display = 'none';
 
                 const isUser = role === 'user';
                 const div = document.createElement('div');
-                div.className = `message ${isUser ? 'user' : 'ai'}`;
+                div.className = `message ${isUser ? 'user' : 'ai'}${isError ? ' error' : ''}`;
 
                 const avatar = document.createElement('div');
                 avatar.className = 'msg-avatar';
@@ -613,7 +526,6 @@
                 bubble.className = 'bubble';
 
                 const text = document.createElement('span');
-                // render newlines sebagai <br>
                 text.innerHTML = content.replace(/\n/g, '<br>');
                 bubble.appendChild(text);
 
@@ -629,9 +541,7 @@
                 scrollToBottom();
             }
 
-            // ── Tampilkan typing indicator ──────────────────────
             function showTyping() {
-                // Hapus typing yang sudah ada
                 const existing = wrapper.querySelector('.typing-indicator');
                 if (existing) existing.remove();
 
@@ -645,7 +555,6 @@
                     dots.appendChild(span);
                 }
 
-                // avatar kecil
                 const avatar = document.createElement('div');
                 avatar.className = 'msg-avatar';
                 avatar.textContent = 'J';
@@ -663,32 +572,33 @@
                 if (el) el.remove();
             }
 
-            // ── Panggil OpenAI API ──────────────────────────────
+            // ── Panggil OpenAI via proxy ──────────────────────────
             async function callOpenAI(userMessage) {
-                // Siapkan history (max 10 pesan terakhir agar tidak kepanjangan)
                 const history = messages.slice(-10);
                 const conversation = [
                     { role: 'system', content: 'Kamu adalah JOELL AI, asisten yang cerdas, ramah, dan membantu. Jawablah dengan bahasa Indonesia yang natural dan informatif.' },
                     ...history
                 ];
 
-                // Jika userMessage belum ada di history, tambahkan
-                // (kita sudah tambahkan sebelum panggil)
+                const payload = {
+                    model: MODEL,
+                    messages: conversation,
+                    max_tokens: MAX_TOKENS,
+                    temperature: TEMPERATURE,
+                    stream: false
+                };
+
+                // Gunakan proxy untuk menghindari CORS
+                const targetUrl = PROXY_URL + encodeURIComponent(OPENAI_URL);
 
                 try {
-                    const response = await fetch(API_URL, {
+                    const response = await fetch(targetUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': `Bearer ${API_KEY}`
                         },
-                        body: JSON.stringify({
-                            model: MODEL,
-                            messages: conversation,
-                            max_tokens: MAX_TOKENS,
-                            temperature: TEMPERATURE,
-                            stream: false
-                        })
+                        body: JSON.stringify(payload)
                     });
 
                     if (!response.ok) {
@@ -703,12 +613,31 @@
                     }
 
                     const data = await response.json();
-                    const reply = data.choices?.[0]?.message?.content?.trim() || 'Maaf, saya tidak dapat memproses permintaan Anda.';
+                    const reply = data.choices?.[0]?.message?.content?.trim() ||
+                        'Maaf, saya tidak dapat memproses permintaan Anda.';
                     return reply;
 
                 } catch (err) {
-                    console.error('[JOELL AI] API Error:', err);
-                    return `⚠️ Terjadi kesalahan: ${err.message || 'Silakan coba lagi.'}`;
+                    console.error('[JOELL AI] Error:', err);
+                    // Jika gagal karena proxy, coba langsung (mungkin berhasil di beberapa environment)
+                    try {
+                        const response = await fetch(OPENAI_URL, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${API_KEY}`
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                        const data = await response.json();
+                        const reply = data.choices?.[0]?.message?.content?.trim() ||
+                            'Maaf, saya tidak dapat memproses permintaan Anda.';
+                        return reply;
+                    } catch (fallbackErr) {
+                        console.error('[JOELL AI] Fallback juga gagal:', fallbackErr);
+                        throw new Error(`Gagal terhubung ke OpenAI: ${err.message || 'Cek koneksi atau API key'}`);
+                    }
                 }
             }
 
@@ -717,45 +646,41 @@
                 const text = inputEl.value.trim();
                 if (!text || isProcessing) return;
 
-                // Disable input
                 isProcessing = true;
                 inputEl.disabled = true;
                 sendBtn.disabled = true;
 
-                // 1. Tampilkan pesan user
+                // Tampilkan pesan user
                 renderMessage('user', text);
                 messages.push({ role: 'user', content: text });
 
-                // 2. Kosongkan input
                 inputEl.value = '';
                 inputEl.style.height = 'auto';
 
-                // 3. Tampilkan typing
                 showTyping();
 
-                // 4. Panggil API
-                const reply = await callOpenAI(text);
+                try {
+                    const reply = await callOpenAI(text);
+                    hideTyping();
+                    renderMessage('assistant', reply);
+                    messages.push({ role: 'assistant', content: reply });
+                } catch (err) {
+                    hideTyping();
+                    renderMessage('assistant', `⚠️ ${err.message || 'Terjadi kesalahan, coba lagi.'}`, true);
+                    // Tidak simpan error ke history
+                }
 
-                // 5. Sembunyikan typing
-                hideTyping();
-
-                // 6. Tampilkan balasan AI
-                renderMessage('assistant', reply);
-                messages.push({ role: 'assistant', content: reply });
-
-                // 7. Aktifkan kembali
                 isProcessing = false;
                 inputEl.disabled = false;
                 sendBtn.disabled = false;
                 inputEl.focus();
 
-                // 8. Simpan ke localStorage (opsional)
                 try {
                     localStorage.setItem('joell_messages', JSON.stringify(messages));
                 } catch (_) { /* ignore */ }
             }
 
-            // ── Muat riwayat dari localStorage ──────────────────
+            // ── Load history ──────────────────────────────────────
             function loadHistory() {
                 try {
                     const stored = localStorage.getItem('joell_messages');
@@ -763,17 +688,13 @@
                         const parsed = JSON.parse(stored);
                         if (Array.isArray(parsed) && parsed.length > 0) {
                             messages = parsed;
-                            // Render ulang semua pesan
-                            // Hapus semua child kecuali empty state
                             const children = wrapper.children;
                             for (let i = children.length - 1; i >= 0; i--) {
                                 if (children[i].id !== 'emptyState') {
                                     children[i].remove();
                                 }
                             }
-                            // Sembunyikan empty state
                             if (emptyState) emptyState.style.display = 'none';
-                            // Render each message
                             messages.forEach(msg => {
                                 if (msg.role === 'user' || msg.role === 'assistant') {
                                     renderMessage(msg.role, msg.content);
@@ -787,50 +708,36 @@
                 return false;
             }
 
-            // ── Auto-resize textarea ─────────────────────────────
+            // ── Auto-resize ──────────────────────────────────────
             function autoResize() {
                 inputEl.style.height = 'auto';
                 inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
             }
 
-            // ── Event listeners ───────────────────────────────────
+            // ── Event ─────────────────────────────────────────────
             inputEl.addEventListener('input', autoResize);
-
             inputEl.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     sendMessage();
                 }
             });
-
             sendBtn.addEventListener('click', sendMessage);
 
-            // ── Inisialisasi ──────────────────────────────────────
+            // ── Init ──────────────────────────────────────────────
             function init() {
-                // Muat history jika ada
                 const hasHistory = loadHistory();
-
-                // Jika tidak ada history, tampilkan empty state
-                if (!hasHistory) {
-                    if (emptyState) emptyState.style.display = 'flex';
-                }
-
-                // Fokus ke input
+                if (!hasHistory && emptyState) emptyState.style.display = 'flex';
                 setTimeout(() => inputEl.focus(), 300);
-
-                // Handle scroll agar input tetap di atas gestur (sudah sticky)
-                console.log('JOELL AI siap digunakan ✨');
+                console.log('JOELL AI siap ✨');
             }
 
-            // ── Jalankan ──────────────────────────────────────────
-            // Tunggu DOM benar-benar siap
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', init);
             } else {
                 init();
             }
 
-            // ── Ekspos ke console untuk debugging ────────────────
             window.JOELL = {
                 sendMessage,
                 clearHistory() {
@@ -846,9 +753,7 @@
                     inputEl.focus();
                 }
             };
-
         })();
     </script>
-
 </body>
-    </html>
+</html>
