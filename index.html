@@ -10,7 +10,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
         }
 
         :root {
@@ -357,15 +357,14 @@
 
     <script>
         // ============================================================
-        //  API KEY GEMINI (dari curl yang berhasil)
+        //  API KEY — UTAH DARI DASHBOARD
         // ============================================================
-        const API_KEY = 'AQ.Ab8RN6JIzhbcQfhmYFB0YPBGqh-TJ4SAfQm13sg5P-6UUHC5NA';
+        const API_KEY = 'AQ.Ab8RN6JHH7-zk7p4-HircmaJIjUu1yEAWoZi0WztkrpY5HRlgg';
 
         // ============================================================
-        //  DAFTAR MODEL (fallback otomatis)
+        //  MODEL — pakai yang paling stabil dulu
         // ============================================================
         const MODELS = [
-            'gemini-2.0-flash-exp',
             'gemini-1.5-flash',
             'gemini-1.5-pro',
             'gemini-pro'
@@ -423,11 +422,12 @@
         }
 
         // ============================================================
-        //  KIRIM KE GEMINI (dengan fallback model otomatis)
+        //  KIRIM KE GEMINI (pakai x-goog-api-key di header)
         // ============================================================
         async function sendToGemini(userMessage) {
             const model = MODELS[currentModelIndex];
-            const url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${API_KEY}`;
+            const url =
+                `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent`;
 
             const payload = {
                 contents: [{
@@ -441,15 +441,21 @@
             try {
                 const res = await fetch(url, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-goog-api-key': API_KEY // <-- autentikasi via header
+                    },
                     body: JSON.stringify(payload)
                 });
 
                 if (!res.ok) {
                     const err = await res.json();
+                    console.error('API Error:', err);
+
                     // Jika model tidak ditemukan, coba model berikutnya
-                    if (err.error?.message?.includes('not found') || err.error?.message?.includes('not supported') || err
-                        .error?.message?.includes('404')) {
+                    if (err.error?.message?.includes('not found') ||
+                        err.error?.message?.includes('not supported') ||
+                        err.error?.message?.includes('404')) {
                         if (currentModelIndex < MODELS.length - 1) {
                             currentModelIndex++;
                             return await sendToGemini(userMessage);
@@ -459,7 +465,8 @@
                 }
 
                 const data = await res.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text || 'Maaf, saya tidak bisa menjawab.';
+                return data.candidates?.[0]?.content?.parts?.[0]?.text ||
+                    'Maaf, saya tidak bisa menjawab.';
             } catch (e) {
                 console.error('Gemini Error:', e);
                 return `⚠️ Terjadi kesalahan: ${e.message}. Coba lagi nanti.`;
