@@ -4,149 +4,203 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JOELL SHOP - AI Customer Service</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
-    <!-- Font Awesome 6 (Icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background: #f5f7fb;
+            font-family: 'Inter', sans-serif;
+            background: #0a0e17;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 16px;
         }
 
-        .chat-wrapper {
+        .chat-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 480px;
+            height: 92vh;
+            max-height: 800px;
             background: #ffffff;
-            border-radius: 28px;
-            box-shadow: 0 20px 60px rgba(0, 20, 30, 0.12);
+            border-radius: 32px;
             overflow: hidden;
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
-            height: 90vh;
-            max-height: 750px;
-            transition: all 0.2s ease;
+            position: relative;
         }
 
-        /* Header */
+        /* ===== HEADER ===== */
         .chat-header {
-            background: #0b2b3b;
+            background: linear-gradient(135deg, #0b1a2a 0%, #1a2f44 100%);
             padding: 20px 24px;
-            color: white;
             display: flex;
             align-items: center;
             gap: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             flex-shrink: 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .chat-header .shop-icon {
-            background: #ffb74d;
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
+        .header-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #f7971e, #ffd200);
+            border-radius: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            color: #0b2b3b;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 800;
+            color: #0b1a2a;
+            box-shadow: 0 4px 15px rgba(247, 151, 30, 0.3);
         }
 
-        .chat-header .shop-info h2 {
+        .header-info {
+            flex: 1;
+        }
+
+        .header-info h1 {
+            color: white;
             font-size: 18px;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: -0.3px;
         }
 
-        .chat-header .shop-info p {
-            font-size: 13px;
-            opacity: 0.7;
-            margin-top: 2px;
+        .header-info .status {
             display: flex;
             align-items: center;
             gap: 6px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            margin-top: 2px;
         }
 
-        .chat-header .shop-info p i {
-            font-size: 10px;
-            color: #4caf50;
+        .header-info .status .dot {
+            width: 7px;
+            height: 7px;
+            background: #4ade80;
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulse 2s infinite;
         }
 
-        /* Messages */
-        .chat-messages {
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+        }
+
+        .header-actions i {
+            cursor: pointer;
+            transition: 0.2s;
+            padding: 4px;
+        }
+
+        .header-actions i:hover {
+            color: white;
+        }
+
+        /* ===== MESSAGES AREA ===== */
+        .messages-wrapper {
             flex: 1;
-            padding: 20px 18px;
             overflow-y: auto;
-            background: #f9fafc;
+            padding: 20px 18px 12px;
+            background: #f8f9fc;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
             scroll-behavior: smooth;
         }
 
-        .chat-messages::-webkit-scrollbar {
+        .messages-wrapper::-webkit-scrollbar {
             width: 4px;
         }
 
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: #cbd5e0;
+        .messages-wrapper::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .messages-wrapper::-webkit-scrollbar-thumb {
+            background: #d1d5db;
             border-radius: 10px;
         }
 
         .message {
-            max-width: 85%;
+            max-width: 88%;
             padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 14.5px;
-            line-height: 1.5;
-            animation: fadeIn 0.25s ease;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.6;
+            animation: slideIn 0.3s ease;
             word-wrap: break-word;
         }
 
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         .message.bot {
-            background: #ffffff;
-            border: 1px solid #e9edf2;
+            background: white;
+            border: 1px solid #eef2f6;
             align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .message.user {
-            background: #0b2b3b;
+            background: linear-gradient(135deg, #0b1a2a, #1a2f44);
             color: white;
             align-self: flex-end;
-            border-bottom-right-radius: 4px;
+            border-bottom-right-radius: 6px;
         }
 
-        .message.bot .bot-label {
+        .message .msg-header {
             display: flex;
             align-items: center;
             gap: 8px;
-            font-weight: 500;
-            color: #0b2b3b;
             margin-bottom: 4px;
-            font-size: 12px;
-            opacity: 0.7;
+            font-size: 11px;
+            font-weight: 600;
+            color: #6b7280;
         }
 
-        .message.bot .bot-label i {
+        .message.bot .msg-header i {
+            color: #f7971e;
+        }
+
+        .message.user .msg-header {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .message .msg-text {
             font-size: 14px;
-            color: #ffb74d;
         }
 
-        .message .time {
+        .message .msg-text strong {
+            color: #f7971e;
+        }
+
+        .message .msg-time {
             font-size: 10px;
             opacity: 0.5;
             margin-top: 6px;
@@ -154,262 +208,326 @@
             text-align: right;
         }
 
-        .message.user .time {
-            color: rgba(255,255,255,0.5);
+        .message.user .msg-time {
+            color: rgba(255, 255, 255, 0.5);
         }
 
+        /* ===== TYPING INDICATOR ===== */
         .typing-indicator {
             display: none;
             align-self: flex-start;
-            background: #ffffff;
-            border: 1px solid #e9edf2;
-            border-radius: 18px;
-            border-bottom-left-radius: 4px;
-            padding: 14px 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-            gap: 6px;
+            background: white;
+            border: 1px solid #eef2f6;
+            border-radius: 20px;
+            border-bottom-left-radius: 6px;
+            padding: 14px 20px;
+            gap: 5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .typing-indicator span {
-            display: inline-block;
             width: 8px;
             height: 8px;
-            background: #9aa6b5;
+            background: #b0b8c4;
             border-radius: 50%;
-            animation: typing 1.2s infinite ease-in-out;
+            display: inline-block;
+            animation: typingBounce 1.4s infinite ease-in-out;
         }
 
         .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
         .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
 
-        @keyframes typing {
+        @keyframes typingBounce {
             0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-            30% { transform: translateY(-8px); opacity: 1; }
+            30% { transform: translateY(-10px); opacity: 1; }
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(6px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Input area */
-        .chat-input-area {
+        /* ===== INPUT AREA (FIXED / STICKY) ===== */
+        .input-area {
             padding: 16px 18px 20px;
-            background: #ffffff;
-            border-top: 1px solid #edf2f7;
+            background: white;
+            border-top: 1px solid #eef2f6;
+            flex-shrink: 0;
+            /* Ini membuat input area tetap di bawah, tidak ikut scroll */
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .input-wrapper {
             display: flex;
             gap: 10px;
-            flex-shrink: 0;
-        }
-
-        .chat-input-area input {
-            flex: 1;
-            padding: 12px 18px;
-            border: 1.5px solid #e2e8f0;
+            align-items: center;
+            background: #f1f4f9;
             border-radius: 30px;
-            font-size: 14px;
-            outline: none;
-            transition: 0.2s;
-            background: #f8fafc;
+            padding: 4px 4px 4px 18px;
+            border: 2px solid transparent;
+            transition: 0.3s;
         }
 
-        .chat-input-area input:focus {
-            border-color: #0b2b3b;
+        .input-wrapper:focus-within {
+            border-color: #0b1a2a;
             background: white;
-            box-shadow: 0 0 0 3px rgba(11, 43, 59, 0.08);
+            box-shadow: 0 0 0 4px rgba(11, 26, 42, 0.06);
         }
 
-        .chat-input-area button {
-            background: #0b2b3b;
+        .input-wrapper input {
+            flex: 1;
             border: none;
-            color: white;
-            width: 50px;
-            height: 50px;
+            background: transparent;
+            padding: 12px 0;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            color: #0b1a2a;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #9ca3af;
+        }
+
+        .input-wrapper button {
+            width: 48px;
+            height: 48px;
+            border: none;
             border-radius: 50%;
-            font-size: 20px;
+            background: linear-gradient(135deg, #0b1a2a, #1a2f44);
+            color: white;
+            font-size: 18px;
             cursor: pointer;
-            transition: 0.2s;
+            transition: 0.25s;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            position: relative;
         }
 
-        .chat-input-area button:hover {
-            background: #1a4053;
-            transform: scale(0.96);
+        .input-wrapper button:hover {
+            transform: scale(1.04);
+            box-shadow: 0 4px 20px rgba(11, 26, 42, 0.3);
         }
 
-        .chat-input-area button:active {
+        .input-wrapper button:active {
             transform: scale(0.92);
         }
 
-        .chat-input-area button:disabled {
-            opacity: 0.4;
-            pointer-events: none;
+        .input-wrapper button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
-        /* Footer small */
-        .footer-note {
+        .input-wrapper button .fa-spinner {
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== FOOTER ===== */
+        .footer-bar {
             text-align: center;
             font-size: 10px;
-            color: #94a3b8;
-            padding: 6px 0 12px;
-            background: #ffffff;
+            color: #9ca3af;
+            padding: 8px 0 14px;
+            background: white;
             border-top: 1px solid #f1f5f9;
-            letter-spacing: 0.3px;
+            flex-shrink: 0;
+            letter-spacing: 0.2px;
         }
 
-        .footer-note i {
-            color: #ffb74d;
+        .footer-bar i {
+            color: #f7971e;
+            margin: 0 4px;
         }
 
-        /* Responsive */
-        @media (max-width: 500px) {
-            .chat-wrapper {
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 520px) {
+            body { padding: 0; }
+            .chat-container {
+                border-radius: 0;
                 height: 100vh;
                 max-height: 100vh;
-                border-radius: 0;
             }
+            .messages-wrapper {
+                padding: 16px 14px 8px;
+            }
+            .input-area {
+                padding: 12px 14px 16px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .message {
+                max-width: 94%;
+                font-size: 13px;
+                padding: 10px 14px;
+            }
+            .header-info h1 { font-size: 16px; }
         }
     </style>
 </head>
 <body>
 
-<div class="chat-wrapper">
-    <!-- Header -->
+<div class="chat-container">
+    <!-- HEADER -->
     <div class="chat-header">
-        <div class="shop-icon"><i class="fas fa-store"></i></div>
-        <div class="shop-info">
-            <h2>JOELL SHOP</h2>
-            <p><i class="fas fa-circle"></i> Online · AI siap membantu</p>
+        <div class="header-avatar">J</div>
+        <div class="header-info">
+            <h1>JOELL SHOP</h1>
+            <div class="status">
+                <span class="dot"></span>
+                AI siap membantu
+            </div>
         </div>
-        <div style="margin-left: auto; opacity: 0.6; font-size: 14px;">
-            <i class="fas fa-robot"></i>
+        <div class="header-actions">
+            <i class="fas fa-rotate-right" id="resetBtn" title="Mulai ulang chat"></i>
         </div>
     </div>
 
-    <!-- Messages -->
-    <div class="chat-messages" id="chatMessages">
+    <!-- MESSAGES -->
+    <div class="messages-wrapper" id="messagesWrapper">
         <div class="message bot">
-            <div class="bot-label"><i class="fas fa-robot"></i> JOELL SHOP AI</div>
-            Halo! Selamat datang di <strong>JOELL SHOP</strong> 👋<br />
-            Saya asisten AI siap membantu soal produk, stok, pengiriman, atau rekomendasi. Ada yang bisa saya bantu?
-            <span class="time">Sekarang</span>
+            <div class="msg-header">
+                <i class="fas fa-robot"></i> JOELL SHOP AI
+            </div>
+            <div class="msg-text">
+                Halo! Selamat datang di <strong>JOELL SHOP</strong> 👋<br />
+                Saya asisten AI siap membantu soal produk, stok, pengiriman, atau rekomendasi. Ada yang bisa saya bantu?
+            </div>
+            <span class="msg-time">Sekarang</span>
+        </div>
+
+        <!-- Typing indicator -->
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span><span></span><span></span>
         </div>
     </div>
 
-    <!-- Typing Indicator -->
-    <div class="typing-indicator" id="typingIndicator">
-        <span></span><span></span><span></span>
+    <!-- INPUT AREA (STICKY / TIDAK IKUT SCROLL) -->
+    <div class="input-area">
+        <div class="input-wrapper">
+            <input type="text" id="userInput" placeholder="Tanyakan soal produk..." autofocus />
+            <button id="sendBtn" aria-label="Kirim pesan">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
     </div>
 
-    <!-- Input -->
-    <div class="chat-input-area">
-        <input type="text" id="userInput" placeholder="Tanyakan soal produk..." autofocus />
-        <button id="sendBtn" aria-label="Kirim"><i class="fas fa-paper-plane"></i></button>
-    </div>
-    <div class="footer-note">
+    <div class="footer-bar">
         <i class="fas fa-bolt"></i> Didukung Google Gemini AI
     </div>
 </div>
 
 <script>
     (function() {
-        // ---------- Konfigurasi ----------
+        // ===== KONFIGURASI =====
         const API_KEY = 'AIzaSyBvylAMy9qJXvtkCJAhELBNF2yHfVZQcz0';
         const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${API_KEY}`;
 
-        // Elemen DOM
-        const chatMessages = document.getElementById('chatMessages');
+        // ===== DOM ELEMENTS =====
+        const messagesWrapper = document.getElementById('messagesWrapper');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         const typingIndicator = document.getElementById('typingIndicator');
+        const resetBtn = document.getElementById('resetBtn');
 
-        // ---------- Helper functions ----------
+        // ===== FUNGSI =====
         function addMessage(text, sender) {
             const div = document.createElement('div');
             div.className = `message ${sender}`;
 
+            const header = document.createElement('div');
+            header.className = 'msg-header';
+
             if (sender === 'bot') {
-                const label = document.createElement('div');
-                label.className = 'bot-label';
-                label.innerHTML = '<i class="fas fa-robot"></i> JOELL SHOP AI';
-                div.appendChild(label);
-
-                const content = document.createElement('span');
-                // parse simple markdown (bold)
-                content.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                div.appendChild(content);
-
-                // time
-                const time = document.createElement('span');
-                time.className = 'time';
-                time.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                div.appendChild(time);
+                header.innerHTML = '<i class="fas fa-robot"></i> JOELL SHOP AI';
             } else {
-                // user
-                const content = document.createElement('span');
-                content.textContent = text;
-                div.appendChild(content);
-
-                const time = document.createElement('span');
-                time.className = 'time';
-                time.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-                div.appendChild(time);
+                header.innerHTML = '<i class="fas fa-user"></i> Anda';
             }
+            div.appendChild(header);
 
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            const textDiv = document.createElement('div');
+            textDiv.className = 'msg-text';
+            if (sender === 'bot') {
+                textDiv.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            } else {
+                textDiv.textContent = text;
+            }
+            div.appendChild(textDiv);
+
+            const time = document.createElement('span');
+            time.className = 'msg-time';
+            time.textContent = new Date().toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            div.appendChild(time);
+
+            // Insert before typing indicator
+            messagesWrapper.insertBefore(div, typingIndicator);
+            messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
         }
 
         function showTyping() {
             typingIndicator.style.display = 'flex';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+            messagesWrapper.scrollTop = messagesWrapper.scrollHeight;
         }
 
         function hideTyping() {
             typingIndicator.style.display = 'none';
         }
 
-        function setLoadingState(isLoading) {
+        function setLoading(isLoading) {
             sendBtn.disabled = isLoading;
             userInput.disabled = isLoading;
             if (isLoading) {
-                sendBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i>';
+                sendBtn.innerHTML = '<i class="fas fa-spinner"></i>';
             } else {
                 sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i>';
             }
         }
 
-        // ---------- Core: call Gemini API ----------
+        function resetChat() {
+            // Hapus semua pesan kecuali yang pertama (bot) dan typing indicator
+            const messages = messagesWrapper.querySelectorAll('.message');
+            messages.forEach((msg, index) => {
+                if (index > 0) msg.remove();
+            });
+            // Reset typing
+            hideTyping();
+            // Fokus input
+            userInput.focus();
+            // Scroll ke atas
+            messagesWrapper.scrollTop = 0;
+        }
+
+        // ===== KIRIM PESAN KE GEMINI =====
         async function sendToGemini(userMessage) {
             try {
                 showTyping();
-                setLoadingState(true);
+                setLoading(true);
 
-                // System instruction untuk JOELL SHOP
                 const systemPrompt = `
-                Anda adalah asisten AI untuk JOELL SHOP, toko online yang menjual berbagai produk fashion, aksesoris, dan gadget.
-                Tugas Anda: membantu pelanggan dengan ramah, informatif, dan solutif.
-                - Jika ditanya tentang produk, berikan rekomendasi berdasarkan tren atau kebutuhan.
-                - Jika ditanya tentang stok, katakan "Stok tersedia" atau "Sedang habis, akan restock minggu depan".
-                - Jika ditanya tentang pengiriman, jelaskan estimasi 2-4 hari kerja, tersedia JNE & POS.
-                - Jika ditanya tentang harga, sebutkan kisaran harga (misal: mulai Rp 150.000).
-                - Jika pelanggan menyapa, balas dengan sapaan hangat.
-                - Jangan pernah menyebut bahwa Anda adalah AI dari Google atau model Gemini. Cukup katakan "Saya asisten JOELL SHOP".
-                - Jawab dalam bahasa Indonesia yang natural dan sopan. Maksimal 3-4 kalimat.
+                Anda adalah asisten AI untuk JOELL SHOP, toko online yang menjual fashion, aksesoris, dan gadget.
+                Tugas: membantu pelanggan dengan ramah, informatif, dan solutif.
+                - Produk: berikan rekomendasi sesuai tren atau kebutuhan.
+                - Stok: katakan "Stok tersedia" atau "Sedang habis, akan restock minggu depan".
+                - Pengiriman: estimasi 2-4 hari kerja, tersedia JNE & POS.
+                - Harga: sebutkan kisaran harga (contoh: mulai Rp 150.000).
+                - Jangan sebutkan bahwa Anda adalah AI dari Google atau Gemini.
+                - Jawab dalam bahasa Indonesia natural, sopan, maksimal 3-4 kalimat.
                 `;
 
                 const payload = {
-                    contents: [
-                        {
-                            role: "user",
-                            parts: [
-                                { text: `${systemPrompt}\n\nPertanyaan pelanggan: ${userMessage}` }
-                            ]
-                        }
-                    ],
+                    contents: [{
+                        role: "user",
+                        parts: [{ text: `${systemPrompt}\n\nPertanyaan: ${userMessage}` }]
+                    }],
                     generationConfig: {
                         temperature: 0.7,
                         maxOutputTokens: 300,
@@ -423,70 +541,51 @@
                     body: JSON.stringify(payload)
                 });
 
-                // Cek jika response tidak ok
                 if (!response.ok) {
-                    let errorMsg = `Server error (${response.status})`;
+                    let errorMsg = `Error ${response.status}`;
                     try {
                         const errData = await response.json();
-                        if (errData.error && errData.error.message) {
-                            errorMsg = errData.error.message;
-                        }
-                    } catch (_) { /* ignore */ }
+                        if (errData.error?.message) errorMsg = errData.error.message;
+                    } catch (_) {}
                     throw new Error(errorMsg);
                 }
 
                 const data = await response.json();
+                const text = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
 
-                // Ekstrak teks dari response Gemini
-                const candidate = data?.candidates?.[0];
-                if (!candidate) {
-                    throw new Error('Tidak ada respons dari AI.');
+                if (!text) throw new Error('Respons AI kosong.');
+
+                // Bersihkan jika system prompt terbawa
+                let clean = text;
+                if (clean.includes('Pertanyaan:')) {
+                    const parts = clean.split('Pertanyaan:');
+                    if (parts.length > 1) clean = parts[1].trim();
                 }
-
-                const textPart = candidate?.content?.parts?.[0]?.text;
-                if (!textPart) {
-                    throw new Error('Respons AI kosong.');
-                }
-
-                // Bersihkan sedikit (hapus kemungkinan system prompt yang terbawa)
-                let cleanText = textPart.trim();
-                // Jika AI membawa balik system prompt, potong
-                if (cleanText.includes('Pertanyaan pelanggan:')) {
-                    const parts = cleanText.split('Pertanyaan pelanggan:');
-                    if (parts.length > 1) {
-                        cleanText = parts[1].trim();
-                    }
-                }
-
-                return cleanText;
+                return clean;
 
             } catch (error) {
-                console.error('Gemini API Error:', error);
-                return `Maaf, saya sedang mengalami gangguan teknis. 🙏\nError: ${error.message || 'Unknown'}`;
+                console.error('Gemini Error:', error);
+                return `Maaf, saya mengalami gangguan teknis. 🙏\nError: ${error.message || 'Unknown'}`;
             } finally {
                 hideTyping();
-                setLoadingState(false);
+                setLoading(false);
             }
         }
 
-        // ---------- Handle send message ----------
+        // ===== HANDLE SEND =====
         async function handleSend() {
             const message = userInput.value.trim();
             if (!message) return;
 
-            // Tampilkan pesan user
             addMessage(message, 'user');
             userInput.value = '';
             userInput.focus();
 
-            // Dapatkan respons dari AI
             const reply = await sendToGemini(message);
-
-            // Tampilkan balasan bot
             addMessage(reply, 'bot');
         }
 
-        // ---------- Event Listeners ----------
+        // ===== EVENT LISTENERS =====
         sendBtn.addEventListener('click', handleSend);
 
         userInput.addEventListener('keydown', (e) => {
@@ -496,254 +595,31 @@
             }
         });
 
-        // Focus input saat load
+        resetBtn.addEventListener('click', resetChat);
+
+        // Focus saat load
         window.addEventListener('load', () => {
             userInput.focus();
         });
 
-        // ---------- (Opsional) Cek koneksi API di awal ----------
-        async function checkApiConnection() {
+        // ===== TEST API KEY (opsional, tidak mengganggu) =====
+        async function testApi() {
             try {
-                const testPayload = {
-                    contents: [{ role: "user", parts: [{ text: "Halo" }] }],
-                    generationConfig: { maxOutputTokens: 10 }
-                };
                 const res = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(testPayload)
+                    body: JSON.stringify({
+                        contents: [{ role: 'user', parts: [{ text: 'Halo' }] }],
+                        generationConfig: { maxOutputTokens: 5 }
+                    })
                 });
-                if (!res.ok) {
-                    console.warn('API Key mungkin tidak valid atau kuota habis.');
-                }
-            } catch (_) {
-                console.warn('Tidak dapat terhubung ke Gemini API.');
-            }
+                if (!res.ok) console.warn('⚠️ API Key mungkin bermasalah.');
+            } catch (_) {}
         }
-        // checkApiConnection(); // (dipanggil opsional, tidak mengganggu UI)
+        // testApi();
 
     })();
 </script>
 
-</body>
-</html>        @keyframes typing { 0%,60%,100% { transform:translateY(0); opacity:0.4; } 30% { transform:translateY(-6px); opacity:1; } }
-        .chat-input-wrap { display:flex; gap:10px; padding:12px 16px; border-top:1px solid var(--border-subtle); background:var(--bg-secondary); }
-        .chat-input-wrap input { flex:1; padding:12px 16px; border-radius:60px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-size:0.92rem; outline:none; transition:var(--transition); }
-        .chat-input-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
-        .chat-input-wrap input::placeholder { color:var(--text-muted); }
-        .chat-input-wrap button { background:var(--accent); border:none; color:#fff; width:48px; border-radius:50%; font-size:1.1rem; cursor:pointer; transition:var(--transition); display:flex; align-items:center; justify-content:center; }
-        .chat-input-wrap button:hover { background:#7c6df0; box-shadow:0 0 18px var(--accent-glow); }
-        .chat-input-wrap button:disabled { opacity:0.4; cursor:not-allowed; box-shadow:none; }
-        @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:0; } }
-        .suggestion-chips { display:flex; flex-wrap:wrap; gap:8px; padding:8px 16px 12px; border-top:1px solid var(--border-subtle); background:var(--bg-secondary); }
-        .suggestion-chips .chip { background:var(--bg-card); border:1px solid var(--border-subtle); color:var(--text-secondary); padding:6px 14px; border-radius:30px; font-size:0.75rem; cursor:pointer; transition:var(--transition); }
-        .suggestion-chips .chip:hover { border-color:var(--accent); color:var(--text-primary); background:rgba(108,92,231,0.08); }
-        @media (max-width:600px) { .chat-container { height:420px; } .message { max-width:92%; font-size:0.88rem; } .top-header .logo-area { font-size:1.1rem; } .top-header .logo-area img { height:32px; } }
-    </style>
-</head>
-<body>
-<div class="app-container">
-    <header class="top-header">
-        <div class="logo-area">
-            <img src="https://files.catbox.moe/ijemcy.png" alt="logo" />
-            <span>JoellBot</span>
-        </div>
-        <span class="status-badge"><span class="dot"></span> Online</span>
-    </header>
-    <div class="chat-container">
-        <div class="chat-messages" id="chatMessages">
-            <div class="message bot">
-                <div class="msg-label"><i class="fas fa-robot"></i> JoellBot</div>
-                Halo! Saya asisten JOELL SHOP. Saya siap bantu jelaskan produk, harga, varian, dan cara pembayaran (QRIS, GoPay, OVO, DANA, dll.). Ada yang bisa saya bantu?
-                <div class="timestamp">Sekarang</div>
-            </div>
-        </div>
-        <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
-        <div class="suggestion-chips">
-            <span class="chip" data-msg="Apa saja produk yang tersedia?">📦 Produk</span>
-            <span class="chip" data-msg="Bagaimana cara pembayaran?">💳 Pembayaran</span>
-            <span class="chip" data-msg="Harga Panel Pterodactyl?">🐉 Panel</span>
-            <span class="chip" data-msg="Cara order via WhatsApp?">📱 Order</span>
-        </div>
-        <div class="chat-input-wrap">
-            <input type="text" id="chatInput" placeholder="Tanya produk atau pembayaran..." />
-            <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
-        </div>
-    </div>
-</div>
-<script>
-// ============================================================
-//  API KEY — VALID GOOGLE AI STUDIO
-// ============================================================
-const API_KEY = 'AIzaSyBB1_9CEdznfLmIynZOc3amAtPgIscA09I';
-
-// ============================================================
-//  MODEL — pakai yang stabil
-// ============================================================
-const MODELS = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
-let currentModelIndex = 0;
-
-// ============================================================
-//  DATA PRODUK (konteks AI)
-// ============================================================
-const PRODUCT_DATA = `
-Produk JOELL SHOP:
-1. Domain: .com (Rp120.000/thn), .id (Rp85.000/thn), .xyz (Rp45.000/thn), .org (Rp110.000/thn), .net (Rp115.000/thn), .shop (Rp135.000/thn)
-2. Hosting: Basic (Rp150.000/bln), Pro (Rp350.000/bln), Business (Rp650.000/bln), Unlimited (Rp450.000/bln)
-3. VPS: 1 Core (Rp280.000/bln), 2 Core (Rp480.000/bln)
-4. Dedicated Server: mulai Rp1.250.000/bln
-5. Panel Pterodactyl: varian RAM 1GB-11GB, Unlimited, Reseller, Admin (mulai Rp2.000)
-6. Layanan lain: SSL, Email Hosting, CDN, Backup, Migration, Security Audit, WordPress Optimasi, Panel Reseller, Website Builder
-Metode Pembayaran: QRIS (GoPay, OVO, DANA, LinkAja), Transfer Bank (BCA, Mandiri, BRI)
-`;
-
-// ============================================================
-//  ELEMEN DOM
-// ============================================================
-const chatMessages = document.getElementById('chatMessages');
-const chatInput = document.getElementById('chatInput');
-const sendBtn = document.getElementById('sendBtn');
-const typingIndicator = document.getElementById('typingIndicator');
-
-// ============================================================
-//  SYSTEM PROMPT
-// ============================================================
-function getSystemPrompt() {
-    return `
-Anda adalah asisten virtual JOELL SHOP bernama JoellBot.
-Fokus Anda HANYA pada dua hal:
-1. Menjelaskan produk yang dijual di JOELL SHOP (domain, hosting, VPS, panel, dll.) termasuk harga dan varian.
-2. Menjelaskan metode pembayaran yang tersedia (QRIS, GoPay, OVO, DANA, transfer bank, dll.).
-
-Data produk dan pembayaran:
-${PRODUCT_DATA}
-
-ATURAN KETAT:
-- Jika ditanya di luar produk/pembayaran, jawab: "Maaf, saya hanya bisa membantu tentang produk dan pembayaran JOELL SHOP."
-- Gunakan bahasa Indonesia yang sopan dan jelas.
-- Sebutkan harga dengan format Rp X.XXX.
-- Arahkan ke WhatsApp (0877-5175-5160) atau halaman payment (https://joell-payment.vercel.app/) untuk order.
-- Jangan pernah bilang Anda adalah AI, cukup perkenalkan sebagai asisten JOELL SHOP.
-`;
-}
-
-// ============================================================
-//  KIRIM KE GEMINI (API key via query + fallback header)
-// ============================================================
-async function sendToGemini(userMessage) {
-    const model = MODELS[currentModelIndex];
-    // Method 1: API key di query parameter (standar)
-    let url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${API_KEY}`;
-    let payload = {
-        contents: [{
-            parts: [
-                { text: getSystemPrompt() },
-                { text: `Pertanyaan user: ${userMessage}` }
-            ]
-        }]
-    };
-
-    try {
-        let res = await fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        // Jika gagal (misal 404), coba pakai header x-goog-api-key
-        if (!res.ok) {
-            url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent`;
-            res = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-goog-api-key': API_KEY
-                },
-                body: JSON.stringify(payload)
-            });
-        }
-
-        if (!res.ok) {
-            const err = await res.json();
-            console.error('API Error:', err);
-
-            // Jika model tidak ditemukan, coba model berikutnya
-            if (err.error?.message?.includes('not found') ||
-                err.error?.message?.includes('not supported') ||
-                err.error?.message?.includes('404')) {
-                if (currentModelIndex < MODELS.length - 1) {
-                    currentModelIndex++;
-                    return await sendToGemini(userMessage);
-                }
-            }
-            throw new Error(err.error?.message || 'API error');
-        }
-
-        const data = await res.json();
-        return data.candidates?.[0]?.content?.parts?.[0]?.text ||
-            'Maaf, saya tidak bisa menjawab.';
-    } catch (e) {
-        console.error('Gemini Error:', e);
-        return `⚠️ Terjadi kesalahan: ${e.message}. Coba lagi nanti.`;
-    }
-}
-
-// ============================================================
-//  FUNGSI CHAT
-// ============================================================
-function addMessage(text, sender) {
-    const div = document.createElement('div');
-    div.className = `message ${sender}`;
-    if (sender === 'bot') {
-        const label = document.createElement('div');
-        label.className = 'msg-label';
-        label.innerHTML = '<i class="fas fa-robot"></i> JoellBot';
-        div.appendChild(label);
-        const content = document.createElement('div');
-        content.textContent = text;
-        div.appendChild(content);
-    } else {
-        div.textContent = text;
-    }
-    const ts = document.createElement('div');
-    ts.className = 'timestamp';
-    ts.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-    div.appendChild(ts);
-    chatMessages.appendChild(div);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function showTyping(show) {
-    typingIndicator.style.display = show ? 'flex' : 'none';
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-async function handleSend() {
-    const msg = chatInput.value.trim();
-    if (!msg) return;
-    chatInput.value = '';
-    addMessage(msg, 'user');
-    sendBtn.disabled = true;
-    showTyping(true);
-    const reply = await sendToGemini(msg);
-    showTyping(false);
-    addMessage(reply, 'bot');
-    sendBtn.disabled = false;
-}
-
-// ============================================================
-//  EVENT LISTENERS
-// ============================================================
-sendBtn.addEventListener('click', handleSend);
-chatInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleSend();
-});
-document.querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', function() {
-        chatInput.value = this.dataset.msg;
-        handleSend();
-    });
-});
-</script>
 </body>
 </html>
