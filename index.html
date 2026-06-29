@@ -6,537 +6,252 @@
     <title>JoellBot · Produk & Pembayaran</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
-        }
-
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter','Segoe UI',Roboto,sans-serif; }
         :root {
-            --bg-primary: #0b0e14;
-            --bg-secondary: #141820;
-            --bg-card: #1c222c;
-            --text-primary: #f0f4ff;
-            --text-secondary: #a8b5cf;
-            --text-muted: #6b7e9e;
-            --border-subtle: #2a3340;
-            --accent: #6c5ce7;
-            --accent-glow: rgba(108, 92, 231, 0.25);
-            --green: #00b894;
-            --radius: 18px;
-            --radius-sm: 12px;
-            --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.5);
+            --bg-primary:#0b0e14; --bg-secondary:#141820; --bg-card:#1c222c;
+            --text-primary:#f0f4ff; --text-secondary:#a8b5cf; --text-muted:#6b7e9e;
+            --border-subtle:#2a3340; --accent:#6c5ce7; --accent-glow:rgba(108,92,231,0.25);
+            --green:#00b894; --radius:18px; --radius-sm:12px; --shadow-card:0 8px 30px rgba(0,0,0,0.5);
         }
-
-        body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 700px;
-        }
-
-        .top-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 0 12px;
-            border-bottom: 1px solid var(--border-subtle);
-            margin-bottom: 16px;
-        }
-
-        .top-header .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: var(--text-primary);
-        }
-
-        .top-header .logo-area img {
-            height: 38px;
-            width: auto;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.06);
-            padding: 4px;
-            border: 1px solid var(--border-subtle);
-        }
-
-        .top-header .logo-area span {
-            background: linear-gradient(135deg, var(--accent), #a29bfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .status-badge {
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .status-badge .dot {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--green);
-            display: inline-block;
-        }
-
-        .chat-container {
-            background: var(--bg-card);
-            border-radius: var(--radius);
-            border: 1px solid var(--border-subtle);
-            box-shadow: var(--shadow-card);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            height: 500px;
-            max-height: 70vh;
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 18px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .chat-messages::-webkit-scrollbar {
-            width: 4px;
-        }
-        .chat-messages::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 20px;
-        }
-
-        .message {
-            max-width: 88%;
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            animation: fadeIn 0.25s ease;
-            line-height: 1.5;
-            font-size: 0.92rem;
-            word-wrap: break-word;
-        }
-
-        .message.user {
-            align-self: flex-end;
-            background: var(--accent);
-            color: #fff;
-            border-bottom-right-radius: 4px;
-        }
-
-        .message.bot {
-            align-self: flex-start;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-primary);
-            border-bottom-left-radius: 4px;
-        }
-
-        .message.bot .msg-label {
-            font-size: 0.7rem;
-            color: var(--accent);
-            font-weight: 600;
-            margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .message .timestamp {
-            font-size: 0.6rem;
-            opacity: 0.35;
-            margin-top: 4px;
-            text-align: right;
-        }
-
-        .typing-indicator {
-            display: none;
-            align-self: flex-start;
-            padding: 10px 16px;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--border-subtle);
-            gap: 4px;
-        }
-
-        .typing-indicator span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--text-muted);
-            animation: typing 1.2s infinite ease-in-out;
-        }
-
-        .typing-indicator span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        .typing-indicator span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes typing {
-            0%,
-            60%,
-            100% {
-                transform: translateY(0);
-                opacity: 0.4;
-            }
-            30% {
-                transform: translateY(-6px);
-                opacity: 1;
-            }
-        }
-
-        .chat-input-wrap {
-            display: flex;
-            gap: 10px;
-            padding: 12px 16px;
-            border-top: 1px solid var(--border-subtle);
-            background: var(--bg-secondary);
-        }
-
-        .chat-input-wrap input {
-            flex: 1;
-            padding: 12px 16px;
-            border-radius: 60px;
-            border: 1px solid var(--border-subtle);
-            background: var(--bg-card);
-            color: var(--text-primary);
-            font-size: 0.92rem;
-            outline: none;
-            transition: var(--transition);
-        }
-
-        .chat-input-wrap input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px var(--accent-glow);
-        }
-
-        .chat-input-wrap input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .chat-input-wrap button {
-            background: var(--accent);
-            border: none;
-            color: #fff;
-            width: 48px;
-            border-radius: 50%;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chat-input-wrap button:hover {
-            background: #7c6df0;
-            box-shadow: 0 0 18px var(--accent-glow);
-        }
-
-        .chat-input-wrap button:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(6px);
-            }
-            to {
-                opacity: 1;
-                transform: 0;
-            }
-        }
-
-        .suggestion-chips {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            padding: 8px 16px 12px;
-            border-top: 1px solid var(--border-subtle);
-            background: var(--bg-secondary);
-        }
-
-        .suggestion-chips .chip {
-            background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .suggestion-chips .chip:hover {
-            border-color: var(--accent);
-            color: var(--text-primary);
-            background: rgba(108, 92, 231, 0.08);
-        }
-
-        @media (max-width: 600px) {
-            .chat-container {
-                height: 420px;
-            }
-            .message {
-                max-width: 92%;
-                font-size: 0.88rem;
-            }
-            .top-header .logo-area {
-                font-size: 1.1rem;
-            }
-            .top-header .logo-area img {
-                height: 32px;
-            }
-        }
+        body { background:var(--bg-primary); color:var(--text-primary); line-height:1.6; min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px; }
+        .app-container { width:100%; max-width:700px; }
+        .top-header { display:flex; align-items:center; justify-content:space-between; padding:14px 0 12px; border-bottom:1px solid var(--border-subtle); margin-bottom:16px; }
+        .top-header .logo-area { display:flex; align-items:center; gap:12px; font-weight:700; font-size:1.3rem; color:var(--text-primary); }
+        .top-header .logo-area img { height:38px; width:auto; border-radius:10px; background:rgba(255,255,255,0.06); padding:4px; border:1px solid var(--border-subtle); }
+        .top-header .logo-area span { background:linear-gradient(135deg,var(--accent),#a29bfe); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+        .status-badge { font-size:0.7rem; color:var(--text-muted); display:flex; align-items:center; gap:6px; }
+        .status-badge .dot { width:7px; height:7px; border-radius:50%; background:var(--green); display:inline-block; }
+        .chat-container { background:var(--bg-card); border-radius:var(--radius); border:1px solid var(--border-subtle); box-shadow:var(--shadow-card); overflow:hidden; display:flex; flex-direction:column; height:500px; max-height:70vh; }
+        .chat-messages { flex:1; overflow-y:auto; padding:18px 16px; display:flex; flex-direction:column; gap:10px; }
+        .chat-messages::-webkit-scrollbar { width:4px; }
+        .chat-messages::-webkit-scrollbar-thumb { background:var(--accent); border-radius:20px; }
+        .message { max-width:88%; padding:10px 14px; border-radius:var(--radius-sm); animation:fadeIn 0.25s ease; line-height:1.5; font-size:0.92rem; word-wrap:break-word; }
+        .message.user { align-self:flex-end; background:var(--accent); color:#fff; border-bottom-right-radius:4px; }
+        .message.bot { align-self:flex-start; background:var(--bg-secondary); border:1px solid var(--border-subtle); color:var(--text-primary); border-bottom-left-radius:4px; }
+        .message.bot .msg-label { font-size:0.7rem; color:var(--accent); font-weight:600; margin-bottom:4px; display:flex; align-items:center; gap:6px; }
+        .message .timestamp { font-size:0.6rem; opacity:0.35; margin-top:4px; text-align:right; }
+        .typing-indicator { display:none; align-self:flex-start; padding:10px 16px; background:var(--bg-secondary); border-radius:var(--radius-sm); border:1px solid var(--border-subtle); gap:4px; }
+        .typing-indicator span { display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--text-muted); animation:typing 1.2s infinite ease-in-out; }
+        .typing-indicator span:nth-child(2) { animation-delay:0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay:0.4s; }
+        @keyframes typing { 0%,60%,100% { transform:translateY(0); opacity:0.4; } 30% { transform:translateY(-6px); opacity:1; } }
+        .chat-input-wrap { display:flex; gap:10px; padding:12px 16px; border-top:1px solid var(--border-subtle); background:var(--bg-secondary); }
+        .chat-input-wrap input { flex:1; padding:12px 16px; border-radius:60px; border:1px solid var(--border-subtle); background:var(--bg-card); color:var(--text-primary); font-size:0.92rem; outline:none; transition:var(--transition); }
+        .chat-input-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-glow); }
+        .chat-input-wrap input::placeholder { color:var(--text-muted); }
+        .chat-input-wrap button { background:var(--accent); border:none; color:#fff; width:48px; border-radius:50%; font-size:1.1rem; cursor:pointer; transition:var(--transition); display:flex; align-items:center; justify-content:center; }
+        .chat-input-wrap button:hover { background:#7c6df0; box-shadow:0 0 18px var(--accent-glow); }
+        .chat-input-wrap button:disabled { opacity:0.4; cursor:not-allowed; box-shadow:none; }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:0; } }
+        .suggestion-chips { display:flex; flex-wrap:wrap; gap:8px; padding:8px 16px 12px; border-top:1px solid var(--border-subtle); background:var(--bg-secondary); }
+        .suggestion-chips .chip { background:var(--bg-card); border:1px solid var(--border-subtle); color:var(--text-secondary); padding:6px 14px; border-radius:30px; font-size:0.75rem; cursor:pointer; transition:var(--transition); }
+        .suggestion-chips .chip:hover { border-color:var(--accent); color:var(--text-primary); background:rgba(108,92,231,0.08); }
+        @media (max-width:600px) { .chat-container { height:420px; } .message { max-width:92%; font-size:0.88rem; } .top-header .logo-area { font-size:1.1rem; } .top-header .logo-area img { height:32px; } }
     </style>
 </head>
 <body>
-
-    <div class="app-container">
-
-        <header class="top-header">
-            <div class="logo-area">
-                <img src="https://files.catbox.moe/ijemcy.png" alt="logo" />
-                <span>JoellBot</span>
-            </div>
-            <span class="status-badge">
-                <span class="dot"></span> Online
-            </span>
-        </header>
-
-        <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="message bot">
-                    <div class="msg-label"><i class="fas fa-robot"></i> JoellBot</div>
-                    Halo! Saya asisten JOELL SHOP. Saya siap bantu jelaskan produk, harga, varian, dan cara pembayaran (QRIS, GoPay, OVO, DANA, dll.). Ada yang bisa saya bantu?
-                    <div class="timestamp">Sekarang</div>
-                </div>
-            </div>
-
-            <div class="typing-indicator" id="typingIndicator">
-                <span></span><span></span><span></span>
-            </div>
-
-            <div class="suggestion-chips">
-                <span class="chip" data-msg="Apa saja produk yang tersedia?">📦 Produk</span>
-                <span class="chip" data-msg="Bagaimana cara pembayaran?">💳 Pembayaran</span>
-                <span class="chip" data-msg="Harga Panel Pterodactyl?">🐉 Panel</span>
-                <span class="chip" data-msg="Cara order via WhatsApp?">📱 Order</span>
-            </div>
-
-            <div class="chat-input-wrap">
-                <input type="text" id="chatInput" placeholder="Tanya produk atau pembayaran..." />
-                <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+<div class="app-container">
+    <header class="top-header">
+        <div class="logo-area">
+            <img src="https://files.catbox.moe/ijemcy.png" alt="logo" />
+            <span>JoellBot</span>
+        </div>
+        <span class="status-badge"><span class="dot"></span> Online</span>
+    </header>
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div class="msg-label"><i class="fas fa-robot"></i> JoellBot</div>
+                Halo! Saya asisten JOELL SHOP. Saya siap bantu jelaskan produk, harga, varian, dan cara pembayaran (QRIS, GoPay, OVO, DANA, dll.). Ada yang bisa saya bantu?
+                <div class="timestamp">Sekarang</div>
             </div>
         </div>
-
+        <div class="typing-indicator" id="typingIndicator"><span></span><span></span><span></span></div>
+        <div class="suggestion-chips">
+            <span class="chip" data-msg="Apa saja produk yang tersedia?">📦 Produk</span>
+            <span class="chip" data-msg="Bagaimana cara pembayaran?">💳 Pembayaran</span>
+            <span class="chip" data-msg="Harga Panel Pterodactyl?">🐉 Panel</span>
+            <span class="chip" data-msg="Cara order via WhatsApp?">📱 Order</span>
+        </div>
+        <div class="chat-input-wrap">
+            <input type="text" id="chatInput" placeholder="Tanya produk atau pembayaran..." />
+            <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
     </div>
+</div>
+<script>
+// ============================================================
+//  API KEY — VALID GOOGLE AI STUDIO
+// ============================================================
+const API_KEY = 'AIzaSyBB1_9CEdznfLmIynZOc3amAtPgIscA09I';
 
-    <script>
-        // ============================================================
-        //  API KEY — UTAH DARI DASHBOARD
-        // ============================================================
-        const API_KEY = 'AQ.Ab8RN6JHH7-zk7p4-HircmaJIjUu1yEAWoZi0WztkrpY5HRlgg';
+// ============================================================
+//  MODEL — pakai yang stabil
+// ============================================================
+const MODELS = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
+let currentModelIndex = 0;
 
-        // ============================================================
-        //  MODEL — pakai yang paling stabil dulu
-        // ============================================================
-        const MODELS = [
-            'gemini-1.5-flash',
-            'gemini-1.5-pro',
-            'gemini-pro'
-        ];
+// ============================================================
+//  DATA PRODUK (konteks AI)
+// ============================================================
+const PRODUCT_DATA = `
+Produk JOELL SHOP:
+1. Domain: .com (Rp120.000/thn), .id (Rp85.000/thn), .xyz (Rp45.000/thn), .org (Rp110.000/thn), .net (Rp115.000/thn), .shop (Rp135.000/thn)
+2. Hosting: Basic (Rp150.000/bln), Pro (Rp350.000/bln), Business (Rp650.000/bln), Unlimited (Rp450.000/bln)
+3. VPS: 1 Core (Rp280.000/bln), 2 Core (Rp480.000/bln)
+4. Dedicated Server: mulai Rp1.250.000/bln
+5. Panel Pterodactyl: varian RAM 1GB-11GB, Unlimited, Reseller, Admin (mulai Rp2.000)
+6. Layanan lain: SSL, Email Hosting, CDN, Backup, Migration, Security Audit, WordPress Optimasi, Panel Reseller, Website Builder
+Metode Pembayaran: QRIS (GoPay, OVO, DANA, LinkAja), Transfer Bank (BCA, Mandiri, BRI)
+`;
 
-        let currentModelIndex = 0;
+// ============================================================
+//  ELEMEN DOM
+// ============================================================
+const chatMessages = document.getElementById('chatMessages');
+const chatInput = document.getElementById('chatInput');
+const sendBtn = document.getElementById('sendBtn');
+const typingIndicator = document.getElementById('typingIndicator');
 
-        // ============================================================
-        //  DATA PRODUK (konteks untuk AI)
-        // ============================================================
-        const PRODUCT_DATA = `
-        Produk JOELL SHOP:
-        1. Domain: .com (Rp120.000/thn), .id (Rp85.000/thn), .xyz (Rp45.000/thn), .org (Rp110.000/thn), .net (Rp115.000/thn), .shop (Rp135.000/thn)
-        2. Hosting: Basic (Rp150.000/bln), Pro (Rp350.000/bln), Business (Rp650.000/bln), Unlimited (Rp450.000/bln)
-        3. VPS: 1 Core (Rp280.000/bln), 2 Core (Rp480.000/bln)
-        4. Dedicated Server: mulai Rp1.250.000/bln
-        5. Panel Pterodactyl: varian RAM 1GB-11GB, Unlimited, Reseller, Admin (mulai Rp2.000)
-        6. Layanan lain: SSL, Email Hosting, CDN, Backup, Migration, Security Audit, WordPress Optimasi, Panel Reseller, Website Builder
+// ============================================================
+//  SYSTEM PROMPT
+// ============================================================
+function getSystemPrompt() {
+    return `
+Anda adalah asisten virtual JOELL SHOP bernama JoellBot.
+Fokus Anda HANYA pada dua hal:
+1. Menjelaskan produk yang dijual di JOELL SHOP (domain, hosting, VPS, panel, dll.) termasuk harga dan varian.
+2. Menjelaskan metode pembayaran yang tersedia (QRIS, GoPay, OVO, DANA, transfer bank, dll.).
 
-        Metode Pembayaran:
-        - QRIS (GoPay, OVO, DANA, LinkAja)
-        - Transfer Bank (BCA, Mandiri, BRI)
-        - Scan QR Code di halaman payment: https://joell-payment.vercel.app/
-        `;
+Data produk dan pembayaran:
+${PRODUCT_DATA}
 
-        // ============================================================
-        //  ELEMEN DOM
-        // ============================================================
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const typingIndicator = document.getElementById('typingIndicator');
+ATURAN KETAT:
+- Jika ditanya di luar produk/pembayaran, jawab: "Maaf, saya hanya bisa membantu tentang produk dan pembayaran JOELL SHOP."
+- Gunakan bahasa Indonesia yang sopan dan jelas.
+- Sebutkan harga dengan format Rp X.XXX.
+- Arahkan ke WhatsApp (0877-5175-5160) atau halaman payment (https://joell-payment.vercel.app/) untuk order.
+- Jangan pernah bilang Anda adalah AI, cukup perkenalkan sebagai asisten JOELL SHOP.
+`;
+}
 
-        // ============================================================
-        //  SYSTEM PROMPT
-        // ============================================================
-        function getSystemPrompt() {
-            return `
-            Anda adalah asisten virtual JOELL SHOP bernama JoellBot.
-            Fokus Anda HANYA pada dua hal:
-            1. Menjelaskan produk yang dijual di JOELL SHOP (domain, hosting, VPS, panel, dll.) termasuk harga dan varian.
-            2. Menjelaskan metode pembayaran yang tersedia (QRIS, GoPay, OVO, DANA, transfer bank, dll.).
+// ============================================================
+//  KIRIM KE GEMINI (API key via query + fallback header)
+// ============================================================
+async function sendToGemini(userMessage) {
+    const model = MODELS[currentModelIndex];
+    // Method 1: API key di query parameter (standar)
+    let url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent?key=${API_KEY}`;
+    let payload = {
+        contents: [{
+            parts: [
+                { text: getSystemPrompt() },
+                { text: `Pertanyaan user: ${userMessage}` }
+            ]
+        }]
+    };
 
-            Data produk dan pembayaran:
-            ${PRODUCT_DATA}
-
-            ATURAN KETAT:
-            - Jika ditanya di luar produk/pembayaran, jawab: "Maaf, saya hanya bisa membantu tentang produk dan pembayaran JOELL SHOP."
-            - Jangan jawab pertanyaan politik, agama, atau di luar konteks toko.
-            - Gunakan bahasa Indonesia yang sopan dan jelas.
-            - Sebutkan harga dengan format Rp X.XXX.
-            - Jika ada pertanyaan tentang cara order, arahkan ke WhatsApp (0877-5175-5160) atau halaman payment (https://joell-payment.vercel.app/).
-            - Jangan pernah bilang Anda adalah AI, cukup perkenalkan sebagai asisten JOELL SHOP.
-            `;
-        }
-
-        // ============================================================
-        //  KIRIM KE GEMINI (pakai x-goog-api-key di header)
-        // ============================================================
-        async function sendToGemini(userMessage) {
-            const model = MODELS[currentModelIndex];
-            const url =
-                `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent`;
-
-            const payload = {
-                contents: [{
-                    parts: [
-                        { text: getSystemPrompt() },
-                        { text: `Pertanyaan user: ${userMessage}` }
-                    ]
-                }]
-            };
-
-            try {
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-goog-api-key': API_KEY // <-- autentikasi via header
-                    },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!res.ok) {
-                    const err = await res.json();
-                    console.error('API Error:', err);
-
-                    // Jika model tidak ditemukan, coba model berikutnya
-                    if (err.error?.message?.includes('not found') ||
-                        err.error?.message?.includes('not supported') ||
-                        err.error?.message?.includes('404')) {
-                        if (currentModelIndex < MODELS.length - 1) {
-                            currentModelIndex++;
-                            return await sendToGemini(userMessage);
-                        }
-                    }
-                    throw new Error(err.error?.message || 'API error');
-                }
-
-                const data = await res.json();
-                return data.candidates?.[0]?.content?.parts?.[0]?.text ||
-                    'Maaf, saya tidak bisa menjawab.';
-            } catch (e) {
-                console.error('Gemini Error:', e);
-                return `⚠️ Terjadi kesalahan: ${e.message}. Coba lagi nanti.`;
-            }
-        }
-
-        // ============================================================
-        //  FUNGSI CHAT
-        // ============================================================
-        function addMessage(text, sender) {
-            const div = document.createElement('div');
-            div.className = `message ${sender}`;
-
-            if (sender === 'bot') {
-                const label = document.createElement('div');
-                label.className = 'msg-label';
-                label.innerHTML = '<i class="fas fa-robot"></i> JoellBot';
-                div.appendChild(label);
-
-                const content = document.createElement('div');
-                content.textContent = text;
-                div.appendChild(content);
-            } else {
-                div.textContent = text;
-            }
-
-            const ts = document.createElement('div');
-            ts.className = 'timestamp';
-            ts.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            div.appendChild(ts);
-
-            chatMessages.appendChild(div);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        function showTyping(show) {
-            typingIndicator.style.display = show ? 'flex' : 'none';
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-
-        async function handleSend() {
-            const msg = chatInput.value.trim();
-            if (!msg) return;
-
-            chatInput.value = '';
-            addMessage(msg, 'user');
-            sendBtn.disabled = true;
-            showTyping(true);
-
-            const reply = await sendToGemini(msg);
-            showTyping(false);
-            addMessage(reply, 'bot');
-            sendBtn.disabled = false;
-        }
-
-        // ============================================================
-        //  EVENT LISTENERS
-        // ============================================================
-        sendBtn.addEventListener('click', handleSend);
-        chatInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') handleSend();
+    try {
+        let res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
 
-        document.querySelectorAll('.chip').forEach(chip => {
-            chip.addEventListener('click', function() {
-                chatInput.value = this.dataset.msg;
-                handleSend();
+        // Jika gagal (misal 404), coba pakai header x-goog-api-key
+        if (!res.ok) {
+            url = `https://generativelanguage.googleapis.com/v1/models/${model}:generateContent`;
+            res = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-goog-api-key': API_KEY
+                },
+                body: JSON.stringify(payload)
             });
-        });
-    </script>
+        }
 
+        if (!res.ok) {
+            const err = await res.json();
+            console.error('API Error:', err);
+
+            // Jika model tidak ditemukan, coba model berikutnya
+            if (err.error?.message?.includes('not found') ||
+                err.error?.message?.includes('not supported') ||
+                err.error?.message?.includes('404')) {
+                if (currentModelIndex < MODELS.length - 1) {
+                    currentModelIndex++;
+                    return await sendToGemini(userMessage);
+                }
+            }
+            throw new Error(err.error?.message || 'API error');
+        }
+
+        const data = await res.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text ||
+            'Maaf, saya tidak bisa menjawab.';
+    } catch (e) {
+        console.error('Gemini Error:', e);
+        return `⚠️ Terjadi kesalahan: ${e.message}. Coba lagi nanti.`;
+    }
+}
+
+// ============================================================
+//  FUNGSI CHAT
+// ============================================================
+function addMessage(text, sender) {
+    const div = document.createElement('div');
+    div.className = `message ${sender}`;
+    if (sender === 'bot') {
+        const label = document.createElement('div');
+        label.className = 'msg-label';
+        label.innerHTML = '<i class="fas fa-robot"></i> JoellBot';
+        div.appendChild(label);
+        const content = document.createElement('div');
+        content.textContent = text;
+        div.appendChild(content);
+    } else {
+        div.textContent = text;
+    }
+    const ts = document.createElement('div');
+    ts.className = 'timestamp';
+    ts.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    div.appendChild(ts);
+    chatMessages.appendChild(div);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function showTyping(show) {
+    typingIndicator.style.display = show ? 'flex' : 'none';
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+async function handleSend() {
+    const msg = chatInput.value.trim();
+    if (!msg) return;
+    chatInput.value = '';
+    addMessage(msg, 'user');
+    sendBtn.disabled = true;
+    showTyping(true);
+    const reply = await sendToGemini(msg);
+    showTyping(false);
+    addMessage(reply, 'bot');
+    sendBtn.disabled = false;
+}
+
+// ============================================================
+//  EVENT LISTENERS
+// ============================================================
+sendBtn.addEventListener('click', handleSend);
+chatInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleSend();
+});
+document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+        chatInput.value = this.dataset.msg;
+        handleSend();
+    });
+});
+</script>
 </body>
 </html>
