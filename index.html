@@ -362,18 +362,7 @@
         const API_KEY = 'AQ.Ab8RN6InXN1I7lDiB1mkzfuvXIaZ6ZUHrtVlyF4B6xGjL7c48g';
 
         // ============================================================
-        //  DAFTAR MODEL YANG DIDUKUNG (fallback)
-        // ============================================================
-        const MODEL_LIST = [
-            'gemini-1.5-pro',
-            'gemini-1.0-pro',
-            'gemini-pro'
-        ];
-
-        let currentModelIndex = 0;
-
-        // ============================================================
-        //  DATA PRODUK
+        //  DATA PRODUK (konteks untuk AI)
         // ============================================================
         const PRODUCT_DATA = `
         Produk JOELL SHOP:
@@ -422,11 +411,11 @@
         }
 
         // ============================================================
-        //  KIRIM KE GEMINI DENGAN FALLBACK MODEL
+        //  KIRIM KE GEMINI (pakai model gemini-pro, API v1)
         // ============================================================
         async function sendToGemini(userMessage) {
-            const model = MODEL_LIST[currentModelIndex];
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
+            // Gunakan API v1 dengan model gemini-pro
+            const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${API_KEY}`;
 
             const payload = {
                 contents: [{
@@ -446,13 +435,7 @@
 
                 if (!res.ok) {
                     const err = await res.json();
-                    // Jika model tidak ditemukan, coba model berikutnya
-                    if (err.error?.message?.includes('not found') || err.error?.message?.includes('not supported')) {
-                        if (currentModelIndex < MODEL_LIST.length - 1) {
-                            currentModelIndex++;
-                            return await sendToGemini(userMessage); // coba model berikutnya
-                        }
-                    }
+                    console.error('API Error Detail:', err);
                     throw new Error(err.error?.message || 'API error');
                 }
 
