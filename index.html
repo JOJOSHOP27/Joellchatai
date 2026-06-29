@@ -3,348 +3,582 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>JOELL AI</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <title>JOELL AI · Chat</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <style>
-        /* (Sama seperti sebelumnya, tidak diubah) */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg-primary: #0b0d15;
-            --bg-secondary: #131620;
-            --bg-card: #1a1e2b;
-            --bg-input: #1e2433;
-            --bg-user-msg: #2b6aff;
-            --text-primary: #f0f3fa;
-            --text-secondary: #a8b3cf;
-            --text-muted: #6b7a9a;
-            --border-color: #2a3040;
-            --radius-md: 16px;
-            --radius-sm: 12px;
-            --radius-full: 9999px;
-            --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
         }
-        html, body { height: 100%; font-family: 'Inter', sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow: hidden; }
-        #app { display: flex; flex-direction: column; height: 100%; max-width: 820px; margin: 0 auto; background: var(--bg-secondary); position: relative; }
-        .chat-header { flex-shrink: 0; padding: 18px 24px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 16px; z-index: 10; backdrop-filter: blur(12px); }
-        .chat-header .avatar { width: 44px; height: 44px; border-radius: var(--radius-full); background: linear-gradient(135deg, #2b6aff, #7c4dff); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: #fff; flex-shrink: 0; box-shadow: 0 0 20px rgba(43,106,255,0.3); }
-        .chat-header .brand { flex: 1; }
-        .chat-header .brand h1 { font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #f0f3fa, #a8b3cf); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .chat-header .brand .sub { font-size: 12px; color: var(--text-muted); -webkit-text-fill-color: var(--text-muted); }
-        .chat-header .status { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); background: var(--bg-card); padding: 6px 14px 6px 10px; border-radius: var(--radius-full); border: 1px solid var(--border-color); }
-        .chat-header .status .dot { width: 8px; height: 8px; border-radius: 50%; background: #00e676; animation: pulse-dot 1.8s ease-in-out infinite; }
-        @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.8)} }
-        .messages-wrapper { flex: 1; overflow-y: auto; padding: 20px 20px 12px; display: flex; flex-direction: column; gap: 8px; scroll-behavior: smooth; background: var(--bg-primary); scroll-padding-bottom: 100px; }
-        .messages-wrapper::-webkit-scrollbar { width: 4px; }
-        .messages-wrapper::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: var(--radius-full); }
-        .message { display: flex; gap: 12px; max-width: 88%; animation: msg-in 0.35s ease-out both; }
-        .message.user { align-self: flex-end; flex-direction: row-reverse; }
-        .message.ai { align-self: flex-start; }
-        @keyframes msg-in { from { opacity:0; transform:translateY(16px) scale(0.97); } to { opacity:1; transform:translateY(0) scale(1); } }
-        .message .msg-avatar { width: 34px; height: 34px; border-radius: var(--radius-full); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; color: #fff; margin-top: 2px; }
-        .message.user .msg-avatar { background: linear-gradient(135deg, #2b6aff, #1a4fd0); box-shadow: 0 4px 12px rgba(43,106,255,0.3); }
-        .message.ai .msg-avatar { background: linear-gradient(135deg, #7c4dff, #536dfe); box-shadow: 0 4px 12px rgba(124,77,255,0.25); }
-        .message .bubble { padding: 14px 18px; border-radius: var(--radius-md); font-size: 15px; line-height: 1.6; word-break: break-word; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        .message.user .bubble { background: var(--bg-user-msg); color: #fff; border-bottom-right-radius: 4px; }
-        .message.ai .bubble { background: var(--bg-card); color: var(--text-primary); border-bottom-left-radius: 4px; border: 1px solid var(--border-color); }
-        .message .bubble .timestamp { display: block; font-size: 10px; color: var(--text-muted); margin-top: 6px; text-align: right; }
-        .message.user .bubble .timestamp { color: rgba(255,255,255,0.6); }
-        .message.error .bubble { background: #2a1a1a; border-color: #ff3b3b; color: #ff8a8a; }
-        .typing-indicator { display: flex; gap: 12px; align-items: center; max-width: 88%; align-self: flex-start; padding: 4px 0 8px; animation: msg-in 0.3s ease-out both; }
-        .typing-indicator .dots { display: flex; gap: 6px; background: var(--bg-card); padding: 12px 20px; border-radius: var(--radius-md); border-bottom-left-radius: 4px; border: 1px solid var(--border-color); }
-        .typing-indicator .dots span { display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); animation: typing-bounce 1.4s ease-in-out infinite both; }
-        .typing-indicator .dots span:nth-child(1) { animation-delay:0s; }
-        .typing-indicator .dots span:nth-child(2) { animation-delay:0.2s; }
-        .typing-indicator .dots span:nth-child(3) { animation-delay:0.4s; }
-        @keyframes typing-bounce { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-8px);opacity:1} }
-        .input-bar { flex-shrink: 0; position: sticky; bottom: 0; background: var(--bg-secondary); padding: 12px 20px 20px; border-top: 1px solid var(--border-color); backdrop-filter: blur(16px); z-index: 20; box-shadow: 0 -8px 32px rgba(0,0,0,0.4); }
-        .input-bar .input-container { display: flex; align-items: flex-end; gap: 12px; background: var(--bg-input); border-radius: var(--radius-md); padding: 6px 6px 6px 18px; border: 1px solid var(--border-color); transition: border-color var(--transition), box-shadow var(--transition); }
-        .input-bar .input-container:focus-within { border-color: #2b6aff; box-shadow: 0 0 0 3px rgba(43,106,255,0.15); }
-        .input-bar .input-container textarea { flex: 1; background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 15px; font-family: inherit; resize: none; padding: 10px 0; max-height: 120px; line-height: 1.5; min-height: 24px; }
-        .input-bar .input-container textarea::placeholder { color: var(--text-muted); }
-        .input-bar .input-container .btn-send { width: 46px; height: 46px; border-radius: var(--radius-sm); border: none; background: linear-gradient(135deg, #2b6aff, #7c4dff); color: #fff; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all var(--transition); flex-shrink: 0; box-shadow: 0 4px 16px rgba(43,106,255,0.25); }
-        .input-bar .input-container .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
-        .empty-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 40px 20px; color: var(--text-muted); user-select: none; }
-        .empty-state .icon { font-size: 52px; margin-bottom: 20px; opacity: 0.3; background: linear-gradient(135deg, #2b6aff, #7c4dff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .empty-state h2 { font-size: 22px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; }
-        .empty-state p { font-size: 14px; max-width: 340px; line-height: 1.6; color: var(--text-muted); }
-        @media (max-width:600px) { .chat-header { padding:14px 16px; } .chat-header .brand h1 { font-size:17px; } .messages-wrapper { padding:14px 12px 8px; } .message { max-width:94%; } .message .bubble { font-size:14px; padding:12px 14px; } .input-bar { padding:8px 12px 16px; } .input-bar .input-container { padding:4px 4px 4px 14px; } .input-bar .input-container textarea { font-size:14px; padding:8px 0; } .input-bar .input-container .btn-send { width:42px; height:42px; font-size:17px; } .empty-state .icon { font-size:40px; } .empty-state h2 { font-size:18px; } }
-        @media (max-width:400px) { .chat-header .status { display:none; } .message .msg-avatar { width:28px; height:28px; font-size:11px; } }
-        .messages-wrapper { scrollbar-width: thin; scrollbar-color: var(--border-color) transparent; }
-        @supports (padding-bottom:env(safe-area-inset-bottom)) { .input-bar { padding-bottom: calc(20px + env(safe-area-inset-bottom)); } }
+
+        :root {
+            --bg-primary: #0b0e14;
+            --bg-secondary: #141820;
+            --bg-card: #1c222c;
+            --text-primary: #f0f4ff;
+            --text-secondary: #a8b5cf;
+            --text-muted: #6b7e9e;
+            --border-subtle: #2a3340;
+            --accent: #10a37f;
+            --accent-glow: rgba(16, 163, 127, 0.25);
+            --radius: 18px;
+            --radius-sm: 12px;
+            --shadow-card: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 720px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            height: 96vh;
+            max-height: 800px;
+        }
+
+        /* ===== HEADER ===== */
+        .top-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0 12px;
+            border-bottom: 1px solid var(--border-subtle);
+            flex-shrink: 0;
+        }
+
+        .top-header .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--text-primary);
+        }
+
+        .top-header .logo-area img {
+            height: 38px;
+            width: auto;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 4px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .top-header .logo-area span {
+            background: linear-gradient(135deg, var(--accent), #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status-badge {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .status-badge .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10a37f;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* ===== CHAT ===== */
+        .chat-container {
+            flex: 1;
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 18px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 20px;
+        }
+
+        .message {
+            max-width: 88%;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            animation: fadeIn 0.25s ease;
+            line-height: 1.5;
+            font-size: 0.92rem;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            align-self: flex-end;
+            background: var(--accent);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot {
+            align-self: flex-start;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+        }
+
+        .message.bot .msg-label {
+            font-size: 0.7rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .message .timestamp {
+            font-size: 0.6rem;
+            opacity: 0.35;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        /* ===== TYPING ===== */
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            padding: 10px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-subtle);
+            gap: 4px;
+        }
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            animation: typing 1.2s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-6px);
+                opacity: 1;
+            }
+        }
+
+        /* ===== INPUT — mengambang di atas ===== */
+        .input-wrapper {
+            flex-shrink: 0;
+            padding: 12px 16px 14px;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-secondary);
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 60px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 0.92rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .input-wrapper input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .input-wrapper button {
+            background: var(--accent);
+            border: none;
+            color: #fff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .input-wrapper button:hover {
+            background: #0d8c6a;
+            box-shadow: 0 0 18px var(--accent-glow);
+        }
+
+        .input-wrapper button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* ===== CHIPS ===== */
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 6px 16px 10px;
+            border-top: 1px solid var(--border-subtle);
+            background: var(--bg-secondary);
+            flex-shrink: 0;
+        }
+
+        .suggestion-chips .chip {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+
+        .suggestion-chips .chip:hover {
+            border-color: var(--accent);
+            color: var(--text-primary);
+            background: rgba(16, 163, 127, 0.08);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: 0;
+            }
+        }
+
+        /* ===== RESPONSIF ===== */
+        @media (max-width: 600px) {
+            .app-container {
+                max-height: none;
+                height: 100vh;
+                padding: 0;
+            }
+            body {
+                padding: 8px;
+            }
+            .top-header .logo-area {
+                font-size: 1.1rem;
+            }
+            .top-header .logo-area img {
+                height: 30px;
+            }
+            .message {
+                max-width: 92%;
+                font-size: 0.88rem;
+            }
+            .input-wrapper {
+                padding: 8px 12px 12px;
+            }
+            .input-wrapper input {
+                font-size: 0.85rem;
+                padding: 10px 14px;
+            }
+            .input-wrapper button {
+                width: 42px;
+                height: 42px;
+                font-size: 1rem;
+            }
+            .suggestion-chips {
+                padding: 4px 12px 8px;
+                gap: 6px;
+            }
+            .suggestion-chips .chip {
+                font-size: 0.65rem;
+                padding: 4px 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .suggestion-chips .chip {
+                font-size: 0.6rem;
+                padding: 3px 8px;
+            }
+            .input-wrapper input {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+            .input-wrapper button {
+                width: 38px;
+                height: 38px;
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div id="app">
-        <header class="chat-header">
-            <div class="avatar">J</div>
-            <div class="brand">
-                <h1>JOELL AI</h1>
-                <div class="sub">Asisten cerdas · 24/7</div>
+    <div class="app-container">
+
+        <!-- HEADER -->
+        <header class="top-header">
+            <div class="logo-area">
+                <img src="https://files.catbox.moe/ijemcy.png" alt="logo" />
+                <span>JOELL AI</span>
             </div>
-            <div class="status">
-                <span class="dot"></span>
-                <span>Online</span>
-            </div>
+            <span class="status-badge">
+                <span class="dot"></span> Online
+            </span>
         </header>
-        <div class="messages-wrapper" id="messagesWrapper">
-            <div class="empty-state" id="emptyState">
-                <div class="icon"><i class="fas fa-comment-dots"></i></div>
-                <h2>Halo, saya JOELL AI</h2>
-                <p>Tanyakan apa saja, saya siap membantu Anda dengan informasi dan wawasan terbaik.</p>
+
+        <!-- CHAT -->
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="msg-label"><i class="fas fa-robot"></i> JOELL AI</div>
+                    Halo! Saya JOELL AI. Saya siap membantu Anda dengan berbagai pertanyaan. Ada yang bisa saya bantu?
+                    <div class="timestamp">Sekarang</div>
+                </div>
+            </div>
+
+            <!-- TYPING -->
+            <div class="typing-indicator" id="typingIndicator">
+                <span></span><span></span><span></span>
+            </div>
+
+            <!-- SUGGESTION CHIPS -->
+            <div class="suggestion-chips">
+                <span class="chip" data-msg="Apa saja produk yang tersedia?">📦 Produk</span>
+                <span class="chip" data-msg="Bagaimana cara pembayaran?">💳 Pembayaran</span>
+                <span class="chip" data-msg="Bantu saya memilih hosting">🖥️ Hosting</span>
+                <span class="chip" data-msg="Cara order via WhatsApp?">📱 Order</span>
+            </div>
+
+            <!-- INPUT — STICKY DI BAWAH -->
+            <div class="input-wrapper">
+                <input type="text" id="chatInput" placeholder="Ketik pesan..." />
+                <button id="sendBtn"><i class="fas fa-paper-plane"></i></button>
             </div>
         </div>
-        <div class="input-bar" id="inputBar">
-            <div class="input-container">
-                <textarea id="userInput" rows="1" placeholder="Ketik pesan..." aria-label="Ketik pesan"></textarea>
-                <button class="btn-send" id="sendBtn" aria-label="Kirim">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
-            </div>
-        </div>
+
     </div>
 
     <script>
-        (function() {
-            'use strict';
+        // ============================================================
+        //  API KEY OPENAI
+        // ============================================================
+        const API_KEY = 'sk-proj-qrLTifE-sRgegJvOmoAS0PvyX7QQitbBdEf-Cnbuw0hr9Za4kRtIilVoxV5EPaYTESTdYwIo78T3BlbkFJ3PxeX2vuYG9ZEBGyY8bhTbW5--yYgohMg1x-T0hvoK4Lj3aemvJtojXc-9lsbJOesXRUSRsdkA';
 
-            const API_KEY = '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';
-            const OPENAI_URL = 'https://api.openai.com/v1/chat/completions';
+        // ============================================================
+        //  MODEL OPENAI (fallback otomatis)
+        // ============================================================
+        const MODELS = ['gpt-4o-mini', 'gpt-3.5-turbo'];
+        let currentModelIndex = 0;
 
-            // Daftar proxy CORS (urutkan dari yang paling stabil)
-            const PROXIES = [
-                url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-                url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-                url => `https://cors-anywhere.herokuapp.com/${url}`
-            ];
+        // ============================================================
+        //  ELEMEN DOM
+        // ============================================================
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
 
-            const MODEL = 'gpt-3.5-turbo';
-            const MAX_TOKENS = 800;
-            const TEMPERATURE = 0.7;
+        // ============================================================
+        //  SYSTEM PROMPT (bisa diisi sesuai kebutuhan)
+        // ============================================================
+        function getSystemPrompt() {
+            return `Kamu adalah JOELL AI, asisten virtual yang ramah dan profesional.
+            Tugasmu membantu pengguna dengan pertanyaan apa pun dengan sopan dan jelas.
+            Gunakan bahasa Indonesia yang baik dan benar.
+            Jika ditanya di luar pengetahuanmu, katakan dengan jujur bahwa kamu tidak tahu.
+            Jangan pernah menyebutkan bahwa kamu adalah AI dari OpenAI, cukup perkenalkan sebagai JOELL AI.`;
+        }
 
-            const wrapper = document.getElementById('messagesWrapper');
-            const emptyState = document.getElementById('emptyState');
-            const inputEl = document.getElementById('userInput');
-            const sendBtn = document.getElementById('sendBtn');
+        // ============================================================
+        //  KIRIM KE OPENAI
+        // ============================================================
+        async function sendToOpenAI(userMessage) {
+            const model = MODELS[currentModelIndex];
+            const url = 'https://api.openai.com/v1/chat/completions';
 
-            let messages = [];
-            let isProcessing = false;
-
-            function scrollToBottom() {
-                requestAnimationFrame(() => wrapper.scrollTop = wrapper.scrollHeight);
-            }
-
-            function getTime() {
-                return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-            }
-
-            function renderMessage(role, content, isError = false) {
-                if (emptyState) emptyState.style.display = 'none';
-                const isUser = role === 'user';
-                const div = document.createElement('div');
-                div.className = `message ${isUser ? 'user' : 'ai'}${isError ? ' error' : ''}`;
-                const avatar = document.createElement('div');
-                avatar.className = 'msg-avatar';
-                avatar.textContent = isUser ? 'U' : 'J';
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                const text = document.createElement('span');
-                text.innerHTML = content.replace(/\n/g, '<br>');
-                bubble.appendChild(text);
-                const ts = document.createElement('span');
-                ts.className = 'timestamp';
-                ts.textContent = getTime();
-                bubble.appendChild(ts);
-                div.appendChild(avatar);
-                div.appendChild(bubble);
-                wrapper.appendChild(div);
-                scrollToBottom();
-            }
-
-            function showTyping() {
-                const existing = wrapper.querySelector('.typing-indicator');
-                if (existing) existing.remove();
-                const div = document.createElement('div');
-                div.className = 'typing-indicator';
-                const dots = document.createElement('div');
-                dots.className = 'dots';
-                for (let i = 0; i < 3; i++) {
-                    const span = document.createElement('span');
-                    dots.appendChild(span);
-                }
-                const avatar = document.createElement('div');
-                avatar.className = 'msg-avatar';
-                avatar.textContent = 'J';
-                avatar.style.cssText =
-                    'width:34px;height:34px;border-radius:9999px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;background:linear-gradient(135deg,#7c4dff,#536dfe);box-shadow:0 4px 12px rgba(124,77,255,0.25);';
-                div.appendChild(avatar);
-                div.appendChild(dots);
-                wrapper.appendChild(div);
-                scrollToBottom();
-            }
-
-            function hideTyping() {
-                const el = wrapper.querySelector('.typing-indicator');
-                if (el) el.remove();
-            }
-
-            // ── Coba panggil OpenAI dengan beberapa proxy ──
-            async function callOpenAI(userMessage) {
-                const history = messages.slice(-10);
-                const conversation = [
-                    { role: 'system', content: 'Kamu adalah JOELL AI, asisten yang cerdas, ramah, dan membantu. Jawablah dengan bahasa Indonesia yang natural dan informatif.' },
-                    ...history
-                ];
-                const payload = {
-                    model: MODEL,
-                    messages: conversation,
-                    max_tokens: MAX_TOKENS,
-                    temperature: TEMPERATURE,
-                    stream: false
-                };
-
-                // Coba setiap proxy secara berurutan
-                for (let i = 0; i < PROXIES.length; i++) {
-                    const proxyFn = PROXIES[i];
-                    const targetUrl = proxyFn(OPENAI_URL);
-                    try {
-                        const response = await fetch(targetUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${API_KEY}`
-                            },
-                            body: JSON.stringify(payload)
-                        });
-                        if (!response.ok) {
-                            const errData = await response.json().catch(() => ({}));
-                            throw new Error(errData.error?.message || `HTTP ${response.status}`);
-                        }
-                        const data = await response.json();
-                        const reply = data.choices?.[0]?.message?.content?.trim() ||
-                            'Maaf, saya tidak dapat memproses permintaan Anda.';
-                        return reply;
-                    } catch (err) {
-                        console.warn(`Proxy ${i+1} gagal:`, err.message);
-                        // Jika ini proxy terakhir, lempar error
-                        if (i === PROXIES.length - 1) {
-                            throw new Error(`Semua proxy gagal. Error terakhir: ${err.message}`);
-                        }
-                        // Lanjut ke proxy berikutnya
-                    }
-                }
-                throw new Error('Tidak ada proxy yang berhasil.');
-            }
-
-            // ── Kirim pesan ──
-            async function sendMessage() {
-                const text = inputEl.value.trim();
-                if (!text || isProcessing) return;
-
-                isProcessing = true;
-                inputEl.disabled = true;
-                sendBtn.disabled = true;
-
-                renderMessage('user', text);
-                messages.push({ role: 'user', content: text });
-
-                inputEl.value = '';
-                inputEl.style.height = 'auto';
-
-                showTyping();
-
-                try {
-                    const reply = await callOpenAI(text);
-                    hideTyping();
-                    renderMessage('assistant', reply);
-                    messages.push({ role: 'assistant', content: reply });
-                } catch (err) {
-                    hideTyping();
-                    renderMessage('assistant', `⚠️ ${err.message || 'Terjadi kesalahan, coba lagi.'}`, true);
-                }
-
-                isProcessing = false;
-                inputEl.disabled = false;
-                sendBtn.disabled = false;
-                inputEl.focus();
-
-                try {
-                    localStorage.setItem('joell_messages', JSON.stringify(messages));
-                } catch (_) {}
-            }
-
-            function loadHistory() {
-                try {
-                    const stored = localStorage.getItem('joell_messages');
-                    if (stored) {
-                        const parsed = JSON.parse(stored);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            messages = parsed;
-                            const children = wrapper.children;
-                            for (let i = children.length - 1; i >= 0; i--) {
-                                if (children[i].id !== 'emptyState') {
-                                    children[i].remove();
-                                }
-                            }
-                            if (emptyState) emptyState.style.display = 'none';
-                            messages.forEach(msg => {
-                                if (msg.role === 'user' || msg.role === 'assistant') {
-                                    renderMessage(msg.role, msg.content);
-                                }
-                            });
-                            scrollToBottom();
-                            return true;
-                        }
-                    }
-                } catch (_) {}
-                return false;
-            }
-
-            function autoResize() {
-                inputEl.style.height = 'auto';
-                inputEl.style.height = Math.min(inputEl.scrollHeight, 120) + 'px';
-            }
-
-            inputEl.addEventListener('input', autoResize);
-            inputEl.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            sendBtn.addEventListener('click', sendMessage);
-
-            function init() {
-                const hasHistory = loadHistory();
-                if (!hasHistory && emptyState) emptyState.style.display = 'flex';
-                setTimeout(() => inputEl.focus(), 300);
-                console.log('JOELL AI siap ✨');
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
-
-            window.JOELL = {
-                sendMessage,
-                clearHistory() {
-                    messages = [];
-                    localStorage.removeItem('joell_messages');
-                    const children = wrapper.children;
-                    for (let i = children.length - 1; i >= 0; i--) {
-                        if (children[i].id !== 'emptyState') {
-                            children[i].remove();
-                        }
-                    }
-                    if (emptyState) emptyState.style.display = 'flex';
-                    inputEl.focus();
-                }
+            const payload = {
+                model: model,
+                messages: [
+                    { role: 'system', content: getSystemPrompt() },
+                    { role: 'user', content: userMessage }
+                ],
+                temperature: 0.7,
+                max_tokens: 500
             };
-        })();
+
+            try {
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!res.ok) {
+                    const err = await res.json();
+                    console.error('OpenAI Error:', err);
+
+                    // Jika model tidak ditemukan atau quota habis, coba model berikutnya
+                    if (err.error?.code === 'model_not_found' ||
+                        err.error?.code === 'insufficient_quota' ||
+                        err.error?.message?.includes('model')) {
+                        if (currentModelIndex < MODELS.length - 1) {
+                            currentModelIndex++;
+                            return await sendToOpenAI(userMessage);
+                        }
+                    }
+                    throw new Error(err.error?.message || 'API error');
+                }
+
+                const data = await res.json();
+                return data.choices?.[0]?.message?.content ||
+                    'Maaf, saya tidak bisa menjawab pertanyaan itu.';
+            } catch (e) {
+                console.error('OpenAI Error:', e);
+                return `⚠️ Terjadi kesalahan: ${e.message}. Coba lagi nanti.`;
+            }
+        }
+
+        // ============================================================
+        //  FUNGSI CHAT
+        // ============================================================
+        function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+
+            if (sender === 'bot') {
+                const label = document.createElement('div');
+                label.className = 'msg-label';
+                label.innerHTML = '<i class="fas fa-robot"></i> JOELL AI';
+                div.appendChild(label);
+
+                const content = document.createElement('div');
+                content.textContent = text;
+                div.appendChild(content);
+            } else {
+                div.textContent = text;
+            }
+
+            const ts = document.createElement('div');
+            ts.className = 'timestamp';
+            ts.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+            div.appendChild(ts);
+
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTyping(show) {
+            typingIndicator.style.display = show ? 'flex' : 'none';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function handleSend() {
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+
+            chatInput.value = '';
+            addMessage(msg, 'user');
+            sendBtn.disabled = true;
+            showTyping(true);
+
+            const reply = await sendToOpenAI(msg);
+            showTyping(false);
+            addMessage(reply, 'bot');
+            sendBtn.disabled = false;
+        }
+
+        // ============================================================
+        //  EVENT LISTENERS
+        // ============================================================
+        sendBtn.addEventListener('click', handleSend);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSend();
+            }
+        });
+
+        document.querySelectorAll('.chip').forEach(chip => {
+            chip.addEventListener('click', function() {
+                chatInput.value = this.dataset.msg;
+                handleSend();
+            });
+        });
+
+        // ============================================================
+        //  FOCUS INPUT SAAT LOAD
+        // ============================================================
+        chatInput.focus();
     </script>
 </body>
 </html>
